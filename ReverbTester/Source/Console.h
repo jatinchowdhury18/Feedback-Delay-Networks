@@ -4,6 +4,7 @@
 #include "JuceHeader.h"
 
 class Console : public Component,
+                private AsyncUpdater,
                 private Logger
 {
 public:
@@ -13,9 +14,13 @@ public:
     void resized() override;
     void paint (Graphics& g) override;
 
+private:
+    void handleAsyncUpdate() override;
     void logMessage (const String& text) override;
 
-private:
+    CriticalSection logMessagesLock;
+    StringArray pendingLogMessages;
+
     CodeDocument codeDoc;
     CodeEditorComponent console { codeDoc, nullptr };
 

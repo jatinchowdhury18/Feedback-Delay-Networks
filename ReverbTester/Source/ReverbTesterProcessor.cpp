@@ -4,13 +4,15 @@
 ReverbTesterProcessor::ReverbTesterProcessor (AudioProcessor* proc) :
     reverbProcessor (proc)
 {
+    readAheadThread.startThread (5);
 }
 
 ReverbTesterProcessor::~ReverbTesterProcessor()
 {
+    source.setSource (nullptr);
 }
 
-void ReverbTesterProcessor::addParameters (Parameters& params)
+void ReverbTesterProcessor::addParameters (Parameters&)
 {
 }
 
@@ -42,8 +44,6 @@ void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
         {
             for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
                 buffer.setSample (ch, buffer.getNumSamples() / 2, 1.0f);
-
-            startIR = false;
         }
 
         if (reverbProcessor.get())
@@ -58,15 +58,24 @@ void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
 
         irSampleCount += samplesToWrite;
 
-        if (buffer.getMagnitude (0, buffer.getNumSamples()) < Decibels::decibelsToGain (-90.0f)
-            || irSampleCount == irBuffer.getNumSamples())
+        if ((buffer.getMagnitude (0, buffer.getNumSamples()) < Decibels::decibelsToGain (-75.0f)
+            || irSampleCount == irBuffer.getNumSamples()) && ! startIR)
             setState (None);
+
+        if (startIR)
+            startIR = false;
     }
 
     else if (state == File)
     {
         AudioSourceChannelInfo channelInfo (buffer);
         source.getNextAudioBlock (channelInfo);
+
+        if (reverbProcessor.get())
+        {
+            MidiBuffer midi;
+            reverbProcessor->processBlock (buffer, midi);
+        }
     }
 }
 
@@ -103,7 +112,7 @@ void ReverbTesterProcessor::loadFile (AudioFormatReader* reader)
     source.releaseResources();
 
     readerSource = std::make_unique<AudioFormatReaderSource> (reader, true);
-    source.setSource (readerSource.get(), 0, nullptr, reader->sampleRate);
+    source.setSource (readerSource.get(), 4 * 4096, &readAheadThread, reader->sampleRate);
     source.prepareToPlay (getBlockSize(), getSampleRate());
 }
 

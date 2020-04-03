@@ -26,8 +26,29 @@ void Console::paint (Graphics& g)
     g.drawRect (getLocalBounds().reduced (5));
 }
 
+void Console::handleAsyncUpdate()
+{
+    StringArray logMessages;
+
+    {
+        const ScopedLock sl (logMessagesLock);
+        pendingLogMessages.swapWith (logMessages);
+    }
+
+    for (auto&& m : logMessages)
+    {
+        codeDoc.insertText (console.getCaretPos(), m + "\n");
+        console.scrollToKeepCaretOnScreen();
+    }
+}
+
 void Console::logMessage (const String& text)
 {
-    codeDoc.insertText (console.getCaretPos(), text + "\n");
-    console.scrollToKeepCaretOnScreen();
+    {
+        const ScopedLock sl (logMessagesLock);
+        pendingLogMessages.add (text);
+        triggerAsyncUpdate();
+    }
+
+    DBG (text);
 }

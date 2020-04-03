@@ -2,7 +2,7 @@
 
 #include "PluginProcessor.h"
 
-class ReverbTesterProcessor : public PluginProcessor,
+class ReverbTesterProcessor : public PluginProcessor<ReverbTesterProcessor>,
                               public ChangeBroadcaster
 {
 public:
@@ -16,7 +16,7 @@ public:
         File,
     };
 
-    void addParameters (Parameters& params) override;
+    static void addParameters (Parameters& params);
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void processBlock (AudioBuffer<float>& buffer) override;
@@ -43,6 +43,7 @@ private:
 
     std::unique_ptr<AudioFormatReaderSource> readerSource;
     AudioTransportSource source;
+    TimeSliceThread readAheadThread { "readAheadThread" };
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbTesterProcessor)
 };

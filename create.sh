@@ -181,13 +181,13 @@ echo "#pragma once" >> $proc_h
 echo "" >> $proc_h
 echo "#include \"PluginProcessor.h\"" >> $proc_h
 echo "" >> $proc_h
-echo "class $class : public PluginProcessor" >> $proc_h
+echo "class $class : public PluginProcessor<${class}>" >> $proc_h
 echo "{" >> $proc_h
 echo "public:" >> $proc_h
 echo "    $class();" >> $proc_h
 echo "    ~$class();" >> $proc_h
 echo "    " >> $proc_h
-echo "    void addParameters (Parameters& params) override;" >> $proc_h
+echo "    static void addParameters (Parameters& params);" >> $proc_h
 echo "    void prepareToPlay (double sampleRate, int samplesPerBlock) override;" >> $proc_h
 echo "    void releaseResources() override;" >> $proc_h
 echo "    void processBlock (AudioBuffer<float>& buffer) override;" >> $proc_h
@@ -214,6 +214,7 @@ echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "void ${class}::prepareToPlay (double sampleRate, int samplesPerBlock)" >> $proc_cpp
 echo "{" >> $proc_cpp
+echo "    AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);" >> $proc_cpp
 echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "void ${class}::releaseResources()" >> $proc_cpp
