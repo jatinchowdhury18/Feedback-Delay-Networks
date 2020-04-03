@@ -1,26 +1,23 @@
 #!/bin/bash
 
-# @TODO: include "audio_plugin_client", and "graphics" modules
-# @TODO: user cleaner config for project and plugin settings
-# @TODO: Processor.cpp: use #pragma once instead of #ifndef
-
 # exit if any command fails
 set -e
 
 if [[ $1 = "--help" || $1 = "" ]]; then
     echo "To create a new plugin project, run ./create.sh <Name of project>"
+    echo "To run the project after creation, run ./create.sh <Name of project> --run"
     echo "The project name must not contain any spaces"
     exit
 fi
 
 echo "Creating plugin project for $1..."
 
-# check for dependencies
-# if [ -d $1 ]; then
-#     echo "Folder of this name already exists... aborting!"
-#     exit
-# fi
+if [ -d $1 ]; then
+    echo "Folder of this name already exists... aborting!"
+    exit
+fi
 
+# check for dependencies
 if [ ! -d modules/JUCE/modules ]; then
     echo "JUCE modules folder not located, make sure you are running from the root of the repo,and have run the setup script."
     exit
@@ -32,7 +29,6 @@ if [ ! -d modules/FRUT/cmake ]; then
 fi
 
 # create project folder
-rm -rf $1
 mkdir $1 && cd $1
 
 # write cmake list
@@ -81,24 +77,11 @@ echo "    PLUGIN_FORMATS" >> CMakeLists.txt
 echo "        VST3" >> CMakeLists.txt
 echo "        AU" >> CMakeLists.txt
 echo "        Standalone" >> CMakeLists.txt
-# echo "    BUILD_VST OFF" >> CMakeLists.txt
-# echo "    BUILD_VST3 ON" >> CMakeLists.txt
-# echo "    BUILD_AUDIOUNIT ON" >> CMakeLists.txt
-# echo "    BUILD_AUDIOUNIT_V3 OFF" >> CMakeLists.txt
-# echo "    BUILD_RTAS OFF" >> CMakeLists.txt
-# echo "    BUILD_AAX OFF" >> CMakeLists.txt
-# echo "    BUILD_STANDALONE_PLUGIN ON" >> CMakeLists.txt
-# echo "    ENABLE_INTER_APP_AUDIO OFF" >> CMakeLists.txt
 echo "    PLUGIN_NAME \"$1\"" >> CMakeLists.txt
 echo "    PLUGIN_DESCRIPTION \"$1\"" >> CMakeLists.txt
 echo "    PLUGIN_MANUFACTURER \"${comp}\"" >> CMakeLists.txt
 echo "    PLUGIN_MANUFACTURER_CODE \"KAJ\"" >> CMakeLists.txt
 echo "    PLUGIN_CODE \"${plug_id}\"" >> CMakeLists.txt
-# echo "    PLUGIN_IS_A_SYNTH OFF" >> CMakeLists.txt
-# echo "    PLUGIN_MIDI_INPUT OFF" >> CMakeLists.txt
-# echo "    PLUGIN_MIDI_OUTPUT OFF" >> CMakeLists.txt
-# echo "    MIDI_EFFECT_PLUGIN OFF" >> CMakeLists.txt
-# echo "    KEY_FOCUS OFF" >> CMakeLists.txt
 echo "    PLUGIN_AU_EXPORT_PREFIX \"$1AU\"" >> CMakeLists.txt
 echo ")" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
@@ -118,14 +101,25 @@ done
 echo ")" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
+# ReverbTester files
+echo "jucer_project_files(\"$1/ReverbTester\"" >> CMakeLists.txt
+echo "# Compile   Xcode     Binary    File" >> CMakeLists.txt
+echo "#           Resource  Resource" >> CMakeLists.txt
+for file in ../ReverbTester/Source/*.h; do
+    echo "  .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
+done
+for file in ../ReverbTester/Source/*.cpp; do
+    echo "  x         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
+done
+echo ")" >> CMakeLists.txt
+echo "" >> CMakeLists.txt
+
 # source files
 echo "jucer_project_files(\"$1/Source\"" >> CMakeLists.txt
 echo "# Compile   Xcode     Binary    File" >> CMakeLists.txt
 echo "#           Resource  Resource" >> CMakeLists.txt
 echo "  .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/Source/$1Processor.h\"" >> CMakeLists.txt
 echo "  x         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/Source/$1Processor.cpp\"" >> CMakeLists.txt
-# echo "  .         .         .         \"Source/$1Editor.h\"" >> CMakeLists.txt
-# echo "  x         .         .         \"Source/$1Editor.cpp\"" >> CMakeLists.txt
 echo ")" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
@@ -231,11 +225,18 @@ echo "{" >> $proc_cpp
 echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "// This creates new instances of the plugin.." >> $proc_cpp
+echo "#if 1 // Set this flag to run with ReverbTester" >> $proc_cpp
+echo "#include \"../../ReverbTester/Source/ReverbTesterProcessor.h\"" >> $proc_cpp
+echo "AudioProcessor* JUCE_CALLTYPE createPluginFilter()" >> $proc_cpp
+echo "{" >> $proc_cpp
+echo "    return new ReverbTesterProcessor (new ${class}());" >> $proc_cpp
+echo "}" >> $proc_cpp
+echo "#else" >> $proc_cpp
 echo "AudioProcessor* JUCE_CALLTYPE createPluginFilter()" >> $proc_cpp
 echo "{" >> $proc_cpp
 echo "    return new ${class}();" >> $proc_cpp
 echo "}" >> $proc_cpp
-
+echo "#endif" >> $proc_cpp
 
 # test build
 echo "Running build..."
@@ -247,3 +248,16 @@ else
     cmake ..
 fi
 cmake --build .
+if [[ $2 = "--run" ]]; then
+    prefix="Debug/Standalone Plugin/$1"
+    if [[ $OSTYPE == "msys" || $OSTYPE == "win32" ]]; then
+        exe="${prefix}.exe"
+    fi
+    if [[ "$OSTYPE" == "darwin" ]]; then
+        exe="${prefix}.app"
+    fi
+    if [[ "$OSTYPE" == "linux-gnu" ]]; then
+        exe="$1"
+    fi
+    "${exe}" &
+fi
