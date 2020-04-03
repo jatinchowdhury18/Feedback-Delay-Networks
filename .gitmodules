@@ -1,0 +1,6 @@
+[submodule "modules/JUCE"]
+	path = modules/JUCE
+	url = https://github.com/WeAreROLI/JUCE.git
+[submodule "modules/FRUT"]
+	path = modules/FRUT
+	url = https://github.com/McMartin/FRUT.git
