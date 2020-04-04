@@ -253,7 +253,7 @@ if [[ $2 = "--run" ]]; then
     if [[ $OSTYPE == "msys" || $OSTYPE == "win32" ]]; then
         exe="Debug/Standalone Plugin/$1.exe"
     fi
-    if [[ "$OSTYPE" == "darwin" ]]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
         exe="$1.app/Contents/MacOS/$1"
     fi
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
