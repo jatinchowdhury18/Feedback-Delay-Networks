@@ -250,15 +250,14 @@ else
 fi
 cmake --build .
 if [[ $2 = "--run" ]]; then
-    prefix="Debug/Standalone Plugin/$1"
     if [[ $OSTYPE == "msys" || $OSTYPE == "win32" ]]; then
-        exe="${prefix}.exe"
+        exe="Debug/Standalone Plugin/$1.exe"
     fi
     if [[ "$OSTYPE" == "darwin" ]]; then
-        exe="${prefix}.app"
+        exe="$1.app/Contents/MacOS/$1"
     fi
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
-        exe="$1"
+        exe="./$1"
     fi
     "${exe}" &
 fi
