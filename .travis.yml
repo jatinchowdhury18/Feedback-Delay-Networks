@@ -26,9 +26,9 @@ matrix:
     - os: windows
       env: run=sh
 
+cache:
+  directories:
+    - $TRAVIS_BUILD_DIR/modules/FRUT/prefix
+
 install: $run setup.sh
-
-script:
-  - echo "Testing creation scipt..."
-  - $run create.sh TravisFDN --run
-
+script: $run test.sh
