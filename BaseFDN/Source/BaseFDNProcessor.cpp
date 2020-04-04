@@ -56,7 +56,7 @@ void BaseFDNProcessor::releaseResources()
 }
 
 void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
-// {
+{
     ScopedNoDenormals noDenormals;
 
     dryBuffer.makeCopyOf (buffer, true);
