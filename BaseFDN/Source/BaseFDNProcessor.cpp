@@ -90,7 +90,7 @@ void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
 }
 
 // This creates new instances of the plugin..
-#if 1 // Set this flag to run with ReverbTester
+#if 0 // Set this flag to run with ReverbTester
 #include "../../ReverbTester/Source/ReverbTesterProcessor.h"
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {

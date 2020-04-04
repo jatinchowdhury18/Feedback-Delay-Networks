@@ -1,5 +1,5 @@
 echo "Testing create scipt..."
-# $run create.sh TravisFDN
+$run create.sh TravisFDN
 
 for dir in $(find * -maxdepth 0 -type d); do
     if [[ ! -e $dir/CMakeLists.txt ]]; then
