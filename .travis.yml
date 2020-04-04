@@ -31,4 +31,4 @@ cache:
     - $TRAVIS_BUILD_DIR/modules/FRUT/prefix
 
 install: $run setup.sh
-script: $run test.sh
+script: $run test.sh || exit 1
