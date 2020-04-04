@@ -28,4 +28,4 @@ matrix:
 
 install: $run setup.sh
 
-script: $run create.sh
+script: $run create.sh TravisFDN --run
