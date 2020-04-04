@@ -6,6 +6,9 @@ project("BaseFDN")
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/FRUT/prefix/FRUT/cmake")
 include(Reprojucer)
 
+# Comment this line to build without the reverb tester
+add_definitions(-DBUILD_WITH_REVERB_TESTER)
+
 jucer_project_begin(
     JUCER_VERSION "5.4.7"
     PROJECT_FILE "${BaseFDN_jucer_FILE}"
@@ -53,20 +56,26 @@ jucer_project_files("BaseFDN/shared"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
 )
 
-jucer_project_files("BaseFDN/ReverbTester"
-# Compile   Xcode     Binary    File
-#           Resource  Resource
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/Console.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/FilePlayer.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/IRViewer.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterEditor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterProcessor.h"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/Console.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/FilePlayer.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/IRViewer.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterEditor.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterProcessor.cpp"
-)
+get_directory_property(MYDEFS COMPILE_DEFINITIONS)
+if(MYDEFS MATCHES "^BUILD_WITH_REVERB_TESTER")
+    MESSAGE(STATUS "Building with ReverbTester")
+    jucer_project_files("BaseFDN/ReverbTester"
+    # Compile   Xcode     Binary    File
+    #           Resource  Resource
+      .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/Console.h"
+      .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/FilePlayer.h"
+      .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/IRViewer.h"
+      .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterEditor.h"
+      .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterProcessor.h"
+      x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/Console.cpp"
+      x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/FilePlayer.cpp"
+      x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/IRViewer.cpp"
+      x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterEditor.cpp"
+      x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterProcessor.cpp"
+    )
+else()
+    MESSAGE(STATUS "Building without ReverbTester")
+endif()
 
 jucer_project_files("BaseFDN/Source"
 # Compile   Xcode     Binary    File

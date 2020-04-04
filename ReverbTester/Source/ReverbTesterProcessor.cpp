@@ -121,7 +121,7 @@ AudioProcessorEditor* ReverbTesterProcessor::createEditor()
     return new ReverbTesterEditor (*this);
 }
 
-#if 0 // set this to 1 to build the ReverbTester without a reverb to test
+#ifndef BUILD_WITH_REVERB_TESTER // don't define this function if the plugin being tested defines it!
 // This creates new instances of the plugin..
 AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
