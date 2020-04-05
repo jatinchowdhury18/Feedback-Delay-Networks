@@ -43,6 +43,9 @@ echo "# FRUT stuff" >> CMakeLists.txt
 echo "list(APPEND CMAKE_MODULE_PATH \"\${CMAKE_CURRENT_LIST_DIR}/../modules/FRUT/prefix/FRUT/cmake\")" >> CMakeLists.txt
 echo "include(Reprojucer)" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
+echo "# Comment this line to build without the reverb tester" >> CMakeLists.txt
+echo "add_definitions(-DBUILD_WITH_REVERB_TESTER)" >> CMakeLists.txt
+echo "" >> CMakeLists.txt
 
 # cmake jucer project
 proj_id=$( cat /dev/urandom | env LC_CTYPE=C tr -cd 'A-Za-z0-9' | head -c 5)
@@ -102,16 +105,22 @@ echo ")" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
 # ReverbTester files
-echo "jucer_project_files(\"$1/ReverbTester\"" >> CMakeLists.txt
-echo "# Compile   Xcode     Binary    File" >> CMakeLists.txt
-echo "#           Resource  Resource" >> CMakeLists.txt
+echo "get_directory_property(MYDEFS COMPILE_DEFINITIONS)" >> CMakeLists.txt
+echo "if(MYDEFS MATCHES \"^BUILD_WITH_REVERB_TESTER\")" >> CMakeLists.txt
+echo "    MESSAGE(STATUS \"Building with ReverbTester\")" >> CMakeLists.txt
+echo "    jucer_project_files(\"$1/ReverbTester\"" >> CMakeLists.txt
+echo "    # Compile   Xcode     Binary    File" >> CMakeLists.txt
+echo "    #           Resource  Resource" >> CMakeLists.txt
 for file in ../ReverbTester/Source/*.h; do
-    echo "  .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
+    echo "      .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
 done
 for file in ../ReverbTester/Source/*.cpp; do
-    echo "  x         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
+    echo "      x         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
 done
 echo ")" >> CMakeLists.txt
+echo "else()" >> CMakeLists.txt
+echo "    MESSAGE(STATUS "Building without ReverbTester")" >> CMakeLists.txt
+echo "endif()" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
 # source files
@@ -250,15 +259,14 @@ else
 fi
 cmake --build .
 if [[ $2 = "--run" ]]; then
-    prefix="Debug/Standalone Plugin/$1"
     if [[ $OSTYPE == "msys" || $OSTYPE == "win32" ]]; then
-        exe="${prefix}.exe"
+        exe="Debug/Standalone Plugin/$1.exe"
     fi
-    if [[ "$OSTYPE" == "darwin" ]]; then
-        exe="${prefix}.app"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        exe="$1.app/Contents/MacOS/$1"
     fi
     if [[ "$OSTYPE" == "linux-gnu" ]]; then
-        exe="$1"
+        exe="./$1"
     fi
     "${exe}" &
 fi

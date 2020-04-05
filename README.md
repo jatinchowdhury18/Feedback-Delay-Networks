@@ -44,23 +44,12 @@ an AU plugin.
 
 By default, the plugins will be built with the
 ReverbTester test bench. To compile without the
-test bench, change the compiler flag at the
-bottom of the `BaseFDNProcessor.cpp` file.
+test bench, comment out the definition at the
+top of the `CMakeLists.txt` file.
 
-```cpp
-// This creates new instances of the plugin..
-#if 1 // Set this flag to run with ReverbTester
-#include "../../ReverbTester/Source/ReverbTesterProcessor.h"
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-{
-    return new ReverbTesterProcessor (new BaseFDNProcessor());
-}
-#else
-AudioProcessor* JUCE_CALLTYPE createPluginFilter()
-{
-    return new BaseFDNProcessor();
-}
-#endif
+```cmake
+# Comment this line to build without the reverb tester
+add_definitions(-DBUILD_WITH_REVERB_TESTER)
 ```
 
 ### Creating a new plugin

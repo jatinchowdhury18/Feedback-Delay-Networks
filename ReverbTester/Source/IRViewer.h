@@ -13,7 +13,7 @@ public:
     void resized() override;
     void paint (Graphics& g) override;
 
-    void changeListenerCallback (ChangeBroadcaster* source);
+    void changeListenerCallback (ChangeBroadcaster* source) override;
 
 private:
     ReverbTesterProcessor& proc;

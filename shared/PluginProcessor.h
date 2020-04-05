@@ -16,7 +16,7 @@ public:
     PluginProcessor();
     ~PluginProcessor();
 
-    const String getName() const { return JucePlugin_Name; }
+    const String getName() const override { return JucePlugin_Name; }
 
     bool acceptsMidi() const override { return false; }
     bool producesMidi() const override { return false; } 

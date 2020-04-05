@@ -44,7 +44,6 @@ jucer_project_files("ReverbTester/shared"
 # Compile   Xcode     Binary    File
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.h"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.cpp"
 )
 
 jucer_project_files("ReverbTester/Source"
