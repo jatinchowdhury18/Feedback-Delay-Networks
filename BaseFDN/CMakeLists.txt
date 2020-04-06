@@ -52,6 +52,7 @@ jucer_project_files("BaseFDN/shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/MixingMatrixUtils.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
 )

@@ -7,10 +7,7 @@
 class DelayLine
 {
 public:
-    DelayLine()
-    {
-        buffer.reset(new float [maxDelay]);
-    }
+    DelayLine() {}
 
     void setDelay (int lengthSamples) { delayLenSamples = (int) floor (jmin (lengthSamples, (int) maxDelay)); }
 
@@ -20,8 +17,15 @@ public:
             buffer[n] = 0.0f;
     }
 
-    inline void write (float data) { buffer[wp] = data; }
-    inline float read() { return buffer[rp]; }
+    inline void write (float data)
+    { 
+        buffer[wp] = data;
+    }
+    
+    inline float read() const noexcept
+    { 
+        return buffer[rp];
+    }
 
     inline void updatePtrs()
     {
@@ -41,7 +45,7 @@ private:
         maxDelay = 64*8192,
     };
 
-    std::unique_ptr<float[]> buffer;
+    float buffer[maxDelay];
     int wp = 0; // write pointer
     int rp = 0; // read pointer
     int delayLenSamples = 0; // delay length in samples

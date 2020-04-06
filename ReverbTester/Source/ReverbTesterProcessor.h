@@ -38,6 +38,7 @@ private:
     std::unique_ptr<AudioProcessor> reverbProcessor;
 
     bool startIR = false;
+    bool startDetecting = false;
     AudioBuffer<float> irBuffer;
     int irSampleCount = 0;
 

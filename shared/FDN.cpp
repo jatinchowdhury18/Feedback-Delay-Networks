@@ -2,11 +2,14 @@
 #include "DelayUtils.h"
 
 FDN::FDN (int numDelays) :
-    numDelays (numDelays)
+    numDelays (numDelays),
+    matrix (numDelays)
 {
-    delayLensMs = DelayUtils::generateDelayLengths (numDelays, 23);
+    delayLensMs = DelayUtils::generateDelayLengths (numDelays, 45, 1.1f, NextDelayType::AddOne);
     delayLines.reset (new DelayLine[numDelays]);
     shelfs.reset (new ShelfFilter[numDelays]);
+
+    MixingMatrixUtils::myMatrix (matrix);
 }
 
 void FDN::reset (float sampleRate)

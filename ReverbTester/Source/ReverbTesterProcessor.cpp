@@ -35,7 +35,17 @@ void ReverbTesterProcessor::releaseResources()
 void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
 {
     if (state == None)
+    {
+        buffer.clear();
+
+        if (reverbProcessor.get())
+        {
+            MidiBuffer midi;
+            reverbProcessor->processBlock (buffer, midi);
+        }
+
         return;
+    }
 
     else if (state == IR)
     {
@@ -44,6 +54,7 @@ void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
         {
             for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
                 buffer.setSample (ch, buffer.getNumSamples() / 2, 1.0f);
+            startIR = false;
         }
 
         if (reverbProcessor.get())
@@ -59,11 +70,11 @@ void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
         irSampleCount += samplesToWrite;
 
         if ((buffer.getMagnitude (0, buffer.getNumSamples()) < Decibels::decibelsToGain (-75.0f)
-            || irSampleCount == irBuffer.getNumSamples()) && ! startIR)
+            || irSampleCount == irBuffer.getNumSamples()) && ! startDetecting)
             setState (None);
 
-        if (startIR)
-            startIR = false;
+        if (startDetecting && buffer.getMagnitude (0, buffer.getNumSamples()) > Decibels::decibelsToGain (-75.0f))
+            startDetecting = false;
     }
 
     else if (state == File)
@@ -84,6 +95,7 @@ void ReverbTesterProcessor::setState (State newState)
     if (newState == IR)
     {
         startIR = true;
+        startDetecting = true;
         irBuffer.clear();
         irBuffer.setSize (getMainBusNumOutputChannels(), 15 * (int) getSampleRate());
         irSampleCount = 0;

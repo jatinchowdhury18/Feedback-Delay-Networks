@@ -17,8 +17,11 @@ BaseFDNProcessor::BaseFDNProcessor()
     dryWetParam      = vts.getRawParameterValue (dryWetTag);
     preDelayMsParam  = vts.getRawParameterValue (preDelayTag);
 
-    fdnProcs[0] = std::make_unique<FDN> (9);
-    fdnProcs[1] = std::make_unique<FDN> (9);
+    const int numDelays = 9;
+    fdnProcs[0] = std::make_unique<FDN> (numDelays);
+    fdnProcs[1] = std::make_unique<FDN> (numDelays);
+
+    MixingMatrixUtils::logMatrix (fdnProcs[0]->getMatrix());
 }
 
 BaseFDNProcessor::~BaseFDNProcessor()
@@ -60,8 +63,6 @@ void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
     ScopedNoDenormals noDenormals;
 
     dryBuffer.makeCopyOf (buffer, true);
-
-    buffer.applyGain (0.25f);
 
     for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
     {
