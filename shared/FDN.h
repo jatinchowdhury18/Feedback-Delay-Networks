@@ -15,7 +15,7 @@ public:
     void setT60High (float newT60High) { t60High = newT60High; }
 
     virtual void reset (float sampleRate);
-    void updateParams();
+    virtual void updateParams();
 
     virtual inline float delayLineAccum (int dInd)
     {
