@@ -57,6 +57,45 @@ To create a new plugin, use the `create.sh` script in
 the root of the repository. For more information run
 `./create.sh --help`.
 
+### Suggested Workflow
+
+If you would like to contribute to the repository, 
+please complete your work on a separate branch.
+When your work is ready to be merged, you may create
+a pull request. Once all automated checks have passed 
+and/or your code has been reviewed, your pull request 
+will be merged.
+
+```bash
+# Create new branch and push to origin
+$ git checkout -b mybranch
+$ git push -u origin mybranch
+
+# Do some work...
+
+# Review your changes
+$ git status
+
+# Add your changes
+$ git add MyNewFolder/
+$ git add MyNewFile.cpp
+
+# Commit your changes
+$ git commit -m "Did some work"
+
+# Push your changes
+$ git push
+```
+
+In order to avoid merge conflicts, please rebase
+before creating a new branch, as well as before
+pushing changes from your branch.
+
+```bash
+$ git fetch origin
+$ git rebase origin/master
+```
+
 ## Papers
 
 JOS (from [Physical Audio Signal Processing](https://ccrma.stanford.edu/~jos/pasp/Feedback_Delay_Networks_FDN.html))
@@ -72,3 +111,6 @@ Delay Networks for Artificial Reverberation"
 Karolina Prawda, Vesa Valimaki, Sebastien Schlecht,
 "Improved Reverberation Time Control for Feedback Delay
 Networks" ([pdf](http://dafx2019.bcu.ac.uk/papers/DAFx2019_paper_46.pdf))
+
+Jean-Marc Jot, Antoine Chaigne, "Digital Delay Networks
+For Designing Artifical Reverberators" ([link](http://www.aes.org/e-lib/browse.cfm?elib=5663))
