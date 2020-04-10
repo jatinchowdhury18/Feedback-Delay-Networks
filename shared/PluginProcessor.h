@@ -50,6 +50,20 @@ private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (PluginProcessor)
 };
 
+// check is template class has addParameters
+template<typename T>
+class HasAddParameters
+{
+    typedef char one;
+    typedef long two;
+
+    template <typename C> static one test (decltype(&C::addParameters));
+    template <typename C> static two test (...);
+
+public:
+    enum { value = sizeof (test<T> (0)) == sizeof (char) };
+};
+
 template<class Processor>
 PluginProcessor<Processor>::PluginProcessor() :
     AudioProcessor (BusesProperties()
@@ -66,7 +80,11 @@ template<class Processor>
 AudioProcessorValueTreeState::ParameterLayout PluginProcessor<Processor>::createParameterLayout()
 {
     Parameters params;
+
+    static_assert (HasAddParameters<Processor>::value,
+        "Processor class MUST contain a static addParameters function!");
     Processor::addParameters (params);
+
     return { params.begin(), params.end() };
 }
 
