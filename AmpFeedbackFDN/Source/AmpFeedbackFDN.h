@@ -7,6 +7,7 @@
 #include "SineWave.h"
 #include "DCBlocker.h"
 
+/** FDN with nonlinear feedback path */
 class AmpFeedbackFDN : public FDN
 {
 public:
@@ -39,7 +40,7 @@ private:
 
     SineWave sine;
     SmoothDelay fbDelay;
-    DCBlocker dcBlocker {35.0f};
+    DCBlocker dcBlocker;
     LPF lpf;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (AmpFeedbackFDN)

@@ -3,12 +3,12 @@
 #include "JuceHeader.h"
 
 /**
-    Base class for plugin processors.
-    
-    Children must override prepareToPlay
-    and releaseResources (from AudioProcessor),
-    as well as processBlock, and addParameters.
-*/
+ * Base class for plugin processors.
+ * 
+ * Children must override prepareToPlay
+ * and releaseResources (from AudioProcessor),
+ * as well as processBlock, and addParameters.
+ * */
 template<class Processor>
 class PluginProcessor : public AudioProcessor
 {

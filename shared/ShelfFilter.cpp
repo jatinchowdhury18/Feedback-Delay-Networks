@@ -36,6 +36,7 @@ void ShelfFilter::reset (float sampleRate)
 
 void ShelfFilter::calcCoefs (float lowGain, float highGain, float fc)
 {
+    // reduce to simple gain element
     if (lowGain == highGain)
     {
         b[0] = lowGain; b[1] = 0.0f;

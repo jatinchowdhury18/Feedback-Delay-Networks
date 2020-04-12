@@ -3,6 +3,7 @@
 
 #include "JuceHeader.h"
 
+/** Console for printing log information */
 class Console : public Component,
                 private AsyncUpdater,
                 private Logger

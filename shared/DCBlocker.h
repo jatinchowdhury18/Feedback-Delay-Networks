@@ -3,6 +3,11 @@
 
 #include "JuceHeader.h"
 
+/** 
+ * First order DC blocking filter.
+ * Useful for avoiding DC build-up in delay lines.
+ * For more information see: https://ccrma.stanford.edu/~jos/filters/DC_Blocker.html
+ * */
 class DCBlocker
 {
 public:
@@ -10,8 +15,14 @@ public:
         freq (freq)
     {}
 
+    /** 
+     * Recomputes filter coefficients for sample rate
+     * and resets filter state.
+     * */
     void reset (float sampleRate)
     {
+        // coefficient calculation derived from
+        // Faust DCBlocker: https://github.com/grame-cncm/faustlibraries/blob/master/filters.lib#L121
         auto wn = MathConstants<float>::pi * freq / sampleRate;
         auto b0 = 1.0f / (1.0f + wn);
         R = (1.0f - wn) * b0;
@@ -20,6 +31,7 @@ public:
         y1 = 0.0f;
     }
 
+    /** Process a single sample */
     inline float process (float x)
     {
         auto y = x - x1 + R * y1;

@@ -2,6 +2,7 @@
 
 #include "PluginProcessor.h"
 
+/** Plugin class for ReverbTester */
 class ReverbTesterProcessor : public PluginProcessor<ReverbTesterProcessor>,
                               public ChangeBroadcaster
 {

@@ -5,6 +5,7 @@ FDN::FDN (int numDelays) :
     numDelays (numDelays),
     matrix (numDelays)
 {
+    // Allocate memory here...
     delayLensMs = DelayUtils::generateDelayLengths (numDelays, 45, 1.1f, NextDelayType::AddOne);
     delayLines = new DelayLine[numDelays];
     shelfs = new ShelfFilter[numDelays];
@@ -39,12 +40,15 @@ void FDN::updateParams()
 {
     for (int dInd = 0; dInd < numDelays; ++dInd)
     {
+        // compute delay line lengths
         auto curDelayLen = (int) (((float) delayLensMs[dInd] / 1000.0f) * size * fs);
         delayLines[dInd].setDelay (curDelayLen);
 
+        // compute gains for desired T60s
         auto gLow = DelayUtils::calcGainForT60 (curDelayLen, fs, t60Low);
         auto gHigh = DelayUtils::calcGainForT60 (curDelayLen, fs, t60High);
 
+        // Set shelf filter parameters
         shelfs[dInd].setFreq (2500.0f);
         shelfs[dInd].setLowGain (gLow);
         shelfs[dInd].setHighGain (gHigh);

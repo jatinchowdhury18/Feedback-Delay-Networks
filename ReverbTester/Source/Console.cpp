@@ -7,7 +7,7 @@ Console::Console()
     console.setLineNumbersShown (false);
     console.setScrollbarThickness (8);
 
-    Logger::setCurrentLogger (this);
+    Logger::setCurrentLogger (this); // redirect global logging to here
 }
 
 Console::~Console()
@@ -35,6 +35,7 @@ void Console::handleAsyncUpdate()
         pendingLogMessages.swapWith (logMessages);
     }
 
+    // write to console
     for (auto&& m : logMessages)
     {
         codeDoc.insertText (console.getCaretPos(), m + "\n");
@@ -45,10 +46,13 @@ void Console::handleAsyncUpdate()
 void Console::logMessage (const String& text)
 {
     {
+        // Add messages to pending list
         const ScopedLock sl (logMessagesLock);
         pendingLogMessages.add (text);
+
+        // print to console asynchronously so as to not block other threads
         triggerAsyncUpdate();
     }
 
-    DBG (text);
+    DBG (text); // write to standard debug output as well
 }

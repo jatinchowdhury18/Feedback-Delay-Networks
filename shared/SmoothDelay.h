@@ -3,6 +3,12 @@
 
 #include "DelayLine.h"
 
+/** 
+ * Delay line with fractional sample
+ * delays and smooth delay length changes.
+ * 
+ * Based on Faust `fdelay`: https://github.com/grame-cncm/faustlibraries/blob/master/delays.lib#L89
+ * */
 class SmoothDelay
 {
 public:

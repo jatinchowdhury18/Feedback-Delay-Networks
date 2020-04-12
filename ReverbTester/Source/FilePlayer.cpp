@@ -69,9 +69,13 @@ void FilePlayer::playButtonPressed()
 void FilePlayer::changeListenerCallback (ChangeBroadcaster* source)
 {
     if (source == thumbnail.get())
+    {
+        // thumbnail loading has progressed
         repaint();
+    }
     else if (source == &proc.getTransportSource())
     {
+        // play state changed...
         if (proc.getTransportSource().isPlaying())
         {
             playButton.setButtonText ("Stop");

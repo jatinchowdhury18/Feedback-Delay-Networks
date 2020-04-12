@@ -3,11 +3,16 @@
 
 #include "JuceHeader.h"
 
+/**
+ * Simple sine wave oscillator based on JUCE example,
+ * see: https://docs.juce.com/master/tutorial_sine_synth.html
+ **/
 class SineWave
 {
 public:
     SineWave() {}
 
+    /** Set oscillation frequency */
     void setFreq (float newFreq)
     {
         freq = newFreq;
@@ -16,17 +21,20 @@ public:
         angleDelta = cyclesPerSamp * MathConstants<float>::twoPi;
     }
 
+    /** Set oscillation amplitude */
     void setAmp (float newAmp)
     {
         amp = newAmp;
     }
 
+    /** Reset internal sammple rate */
     void reset (float sampleRate)
     {
         fs = sampleRate;
         setFreq (freq);
     }
 
+    /** Compute next sample */
     inline float getNextSample()
     {
         auto curSample = sin (curAngle);

@@ -6,6 +6,7 @@
 #include "IRViewer.h"
 #include "FilePlayer.h"
 
+/** GUI class for ReverbTester */
 class ReverbTesterEditor : public AudioProcessorEditor
 {
 public:

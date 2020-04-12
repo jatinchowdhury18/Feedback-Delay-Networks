@@ -3,12 +3,17 @@
 
 #include "JuceHeader.h"
 
+/** 
+ * Standard biquad filter, using TDF-II Direct Form
+ * For more information see: https://ccrma.stanford.edu/~jos/filters/Transposed_Direct_Forms.html
+ * */
 class Biquad
 {
 public:
     Biquad() {}
     virtual ~Biquad() {}
 
+    /** Reset filter state */
     virtual void reset (float sampleRate)
     {
         fs = sampleRate;
@@ -17,6 +22,7 @@ public:
             z[n] = 0.0f;
     }
 
+    /** Process a single sample */
     virtual inline float process (float x)
     {
         // process input sample, direct form II transposed
@@ -34,7 +40,7 @@ protected:
     float z[3] = { 1.0f, 0.0f, 0.0f };
 
 private:
-    const int order = 2;
+    enum {order = 2};
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Biquad)
 };
