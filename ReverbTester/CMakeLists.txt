@@ -128,6 +128,12 @@ jucer_project_module(
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
 )
 
+jucer_project_module(
+    foleys_gui_magic
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules"
+    FOLEYS_SHOW_GUI_EDITOR_PALLETTE OFF # Turn on to edit your GUI!
+)
+
 jucer_export_target(
     "Xcode (MacOSX)"
 )

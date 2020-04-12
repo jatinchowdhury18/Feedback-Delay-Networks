@@ -43,6 +43,7 @@ public:
 protected:
     using Parameters = std::vector<std::unique_ptr<RangedAudioParameter>>;
     AudioProcessorValueTreeState vts;
+    foleys::MagicProcessorState magicState { *this, vts };
 
 private:
     AudioProcessorValueTreeState::ParameterLayout createParameterLayout();
@@ -124,23 +125,17 @@ bool PluginProcessor<Processor>::hasEditor() const
 template<class Processor>
 AudioProcessorEditor* PluginProcessor<Processor>::createEditor()
 {
-    return new GenericAudioProcessorEditor (*this);
+    return new foleys::MagicPluginEditor (magicState);
 }
 
 template<class Processor>
 void PluginProcessor<Processor>::getStateInformation (MemoryBlock& data)
 {
-    auto state = vts.copyState();
-    std::unique_ptr<XmlElement> xml (state.createXml());
-    copyXmlToBinary (*xml, data);
+    magicState.getStateInformation (data);
 }
 
 template<class Processor>
 void PluginProcessor<Processor>::setStateInformation (const void* data, int sizeInBytes)
 {
-    std::unique_ptr<XmlElement> xmlState (getXmlFromBinary (data, sizeInBytes));
-
-    if (xmlState.get() != nullptr)
-        if (xmlState->hasTagName (vts.state.getType()))
-            vts.replaceState (ValueTree::fromXml (*xmlState));
+    magicState.setStateInformation (data, sizeInBytes, getActiveEditor());
 }
