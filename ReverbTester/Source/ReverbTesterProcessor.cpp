@@ -122,7 +122,8 @@ void ReverbTesterProcessor::loadFile (AudioFormatReader* reader)
 {
     source.stop();
     source.releaseResources();
-
+    source.setSource (nullptr);
+    
     readerSource = std::make_unique<AudioFormatReaderSource> (reader, true);
     source.setSource (readerSource.get(), 4 * 4096, &readAheadThread, reader->sampleRate);
     source.prepareToPlay (getBlockSize(), getSampleRate());

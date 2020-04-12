@@ -6,10 +6,22 @@ FDN::FDN (int numDelays) :
     matrix (numDelays)
 {
     delayLensMs = DelayUtils::generateDelayLengths (numDelays, 45, 1.1f, NextDelayType::AddOne);
-    delayLines.reset (new DelayLine[numDelays]);
-    shelfs.reset (new ShelfFilter[numDelays]);
+    delayLines = new DelayLine[numDelays];
+    shelfs = new ShelfFilter[numDelays];
 
     MixingMatrixUtils::myMatrix (matrix);
+
+    delayReads = new float[numDelays];
+}
+
+FDN::~FDN()
+{
+    // NO MEMORY LEAKS
+    delete[] delayReads;
+    delete[] delayAccums;
+
+    delete[] delayLines;
+    delete[] shelfs;
 }
 
 void FDN::reset (float sampleRate)
@@ -20,7 +32,7 @@ void FDN::reset (float sampleRate)
     {
         delayLines[dInd].reset();
         shelfs[dInd].reset (fs);
-    }
+    }        
 }
 
 void FDN::updateParams()

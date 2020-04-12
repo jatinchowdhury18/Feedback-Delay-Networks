@@ -4,11 +4,13 @@
 #include "DelayLine.h"
 #include "ShelfFilter.h"
 #include "MixingMatrixUtils.h"
+#include <numeric>
 
 class FDN
 {
 public:
     FDN (int numDelays);
+    ~FDN();
 
     void setSize (float newSize) { size = newSize; }
     void setT60Low (float newT60Low) { t60Low = newT60Low; }
@@ -17,6 +19,7 @@ public:
     virtual void reset (float sampleRate);
     virtual void updateParams();
 
+    // DEPRECATED in favor of std::inner_product (keeping it around for reference)
     virtual inline float delayLineAccum (int dInd)
     {
         float accum = 0.0f;
@@ -33,18 +36,17 @@ public:
             delayLines[dInd].updatePtrs();
     }
 
+    // This function has been VERY carefully optimised.
+    // Be careful when making adjustments
     virtual inline float processSample (float x)
     {
         float y = 0.0f;
 
-        if (x != 0.0f)
-            y = 0.0f;
-
         for (int dInd = 0; dInd < numDelays; ++dInd)
         {
-            auto accum = delayLineAccum (dInd);
-            if (accum != 0.0f)
-                y = y;
+            for (int sumInd = 0; sumInd < numDelays; sumInd++)
+                delayReads[sumInd] = *delayLines[sumInd].readPtr;
+            auto accum = std::inner_product (matrix.matrix[dInd], matrix.matrix[dInd] + numDelays, delayReads, 0.0f);
 
             y += accum; // add to output
             accum += x; // add input to accumulator
@@ -68,10 +70,15 @@ protected:
 
     std::vector<int> delayLensMs; // milliseconds
 
-    std::unique_ptr<DelayLine[]> delayLines;
-    std::unique_ptr<ShelfFilter[]> shelfs;
+    // Ideally I'd prefer smart pointers over raw pointers, but it
+    // seems that smart pointers have some performance overhead that
+    // becomes noticeable when doing computations like this.
+    DelayLine* delayLines;
+    ShelfFilter* shelfs;
 
     Matrix matrix;
+    float* delayReads = nullptr;
+    float* delayAccums = nullptr;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FDN)

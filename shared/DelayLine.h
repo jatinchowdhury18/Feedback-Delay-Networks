@@ -15,6 +15,9 @@ public:
     {
         for (int n = 0; n < maxDelay; ++n)
             buffer[n] = 0.0f;
+
+        readPtr = &buffer[rp];
+        writePtr = &buffer[wp];
     }
 
     inline void write (float data)
@@ -37,7 +40,13 @@ public:
         rp = wp + delayLenSamples;
         if (rp >= maxDelay) // wrap read pointer
             rp -= maxDelay;
+
+        readPtr = &buffer[rp];
+        writePtr = &buffer[wp];
     }
+
+    float* readPtr;
+    float* writePtr;
 
 private:
     enum

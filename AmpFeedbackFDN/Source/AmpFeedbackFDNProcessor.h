@@ -22,6 +22,8 @@ private:
     std::atomic<float>* fbDriveDBParam = nullptr;
     std::atomic<float>* fbGainDBParam  = nullptr;
     std::atomic<float>* cutoffHzParam  = nullptr;
+    std::atomic<float>* fbOscAmpParam  = nullptr;
+    std::atomic<float>* fbOscFreqParam = nullptr;
 
     std::unique_ptr<AmpFeedbackFDN> fdnProcs[2];
     
