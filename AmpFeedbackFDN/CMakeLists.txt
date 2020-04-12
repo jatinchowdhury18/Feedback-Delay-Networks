@@ -81,7 +81,7 @@ if(MYDEFS MATCHES "^BUILD_WITH_REVERB_TESTER")
       x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../ReverbTester/Source/ReverbTesterProcessor.cpp"
 )
 else()
-    MESSAGE(STATUS Building without ReverbTester)
+    MESSAGE(STATUS "Building without ReverbTester")
 endif()
 
 jucer_project_files("AmpFeedbackFDN/Source"
