@@ -38,7 +38,7 @@ public:
             updateDelay();
     }
 
-    void SmoothDelay::updateDelay()
+    void updateDelay()
     {
         auto lenMs = smoothDelay.getNextValue();
 
