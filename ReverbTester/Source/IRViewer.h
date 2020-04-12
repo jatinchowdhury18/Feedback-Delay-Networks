@@ -3,6 +3,7 @@
 
 #include "ReverbTesterProcessor.h"
 
+/** Class to display impulse response */
 class IRViewer : public Component,
                  private ChangeListener
 {
@@ -20,6 +21,7 @@ private:
 
     TextButton genButton { "Generate IR" };
 
+    // Waveform display
     AudioFormatManager formatManager;
     std::unique_ptr<AudioThumbnailCache> thumbnailCache;
     std::unique_ptr<AudioThumbnail> thumbnail;

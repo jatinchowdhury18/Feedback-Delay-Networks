@@ -3,6 +3,7 @@
 
 #include "ReverbTesterProcessor.h"
 
+/** Class to playback audio file */
 class FilePlayer : public Component,
                    private ChangeListener
 {
@@ -24,6 +25,7 @@ private:
     TextButton fileButton { "Load File" };
     TextButton playButton { "Play" };
 
+    // Audio waveform
     AudioFormatManager formatManager;
     std::unique_ptr<AudioThumbnailCache> thumbnailCache;
     std::unique_ptr<AudioThumbnail> thumbnail;

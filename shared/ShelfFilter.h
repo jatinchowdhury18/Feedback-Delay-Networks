@@ -3,21 +3,33 @@
 
 #include "JuceHeader.h"
 
-/** First order shelving filter */
+/**
+ * First order shelving filter.
+ * For more information see: https://ccrma.stanford.edu/~jos/filters/Low_High_Shelf_Filters.html
+ * */
 class ShelfFilter
 {
 public:
     ShelfFilter();
 
+    /** Set gain at DC */
     void setLowGain (float newLowGain);
+
+    /** Set gain at inifitie frequency*/
     void setHighGain (float newHighGain);
+    
+    /** Set transition frequency */
     void setFreq (float newFreq);
 
+    /** Reset filter state */
     void reset (float sampleRate);
+
+    /** Compute filter coefficients */
     void calcCoefs (float lowGain, float highGain, float fc);
 
     inline float processSample (float x)
     {
+        // Smooth parameter changes
         if (lowGainSmooth.isSmoothing() || highGainSmooth.isSmoothing() || fcSmooth.isSmoothing())
             calcCoefs (lowGainSmooth.getNextValue(), highGainSmooth.getNextValue(), fcSmooth.getNextValue());
 

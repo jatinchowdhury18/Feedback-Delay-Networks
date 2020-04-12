@@ -55,8 +55,12 @@ jucer_project_files("AmpFeedbackFDN/shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/Biquad.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LPF.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SineWave.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DCBlocker.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.cpp"
 )
 
 get_directory_property(MYDEFS COMPILE_DEFINITIONS)

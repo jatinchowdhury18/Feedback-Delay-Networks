@@ -37,10 +37,11 @@ void IRViewer::changeListenerCallback (ChangeBroadcaster* source)
 {
     if (source == thumbnail.get())
     {
-        repaint();
+        repaint(); // thumbnail loading has progressed
     }
     else if (source == &proc)
     {
+        // processor has finished recording IR
         thumbnail->reset (proc.getMainBusNumOutputChannels(), proc.getSampleRate());
         auto& buffer = proc.getIR();
         thumbnail->addBlock (0, buffer, 0, buffer.getNumSamples());

@@ -11,10 +11,14 @@ public:
 
     void setDelay (int lengthSamples) { delayLenSamples = (int) floor (jmin (lengthSamples, (int) maxDelay)); }
 
+    /** Reset delay buffer to 0 */
     void reset()
     {
         for (int n = 0; n < maxDelay; ++n)
             buffer[n] = 0.0f;
+
+        readPtr = &buffer[rp];
+        writePtr = &buffer[wp];
     }
 
     inline void write (float data)
@@ -27,6 +31,7 @@ public:
         return buffer[rp];
     }
 
+    /** Update read and write pointers */
     inline void updatePtrs()
     {
         wp -= 1;
@@ -37,7 +42,16 @@ public:
         rp = wp + delayLenSamples;
         if (rp >= maxDelay) // wrap read pointer
             rp -= maxDelay;
+
+        readPtr = &buffer[rp];
+        writePtr = &buffer[wp];
     }
+
+    // Direct read and write pointers are made available for speed.
+    // Use these with great caution! The read() and write()
+    // functions are preferred.
+    float* readPtr;
+    float* writePtr;
 
 private:
     enum

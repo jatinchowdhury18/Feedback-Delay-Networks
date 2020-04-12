@@ -12,6 +12,14 @@ public:
 
     void calcCoefs (float fc, float Q)
     {
+        // compute filter coefficients for 2-nd order
+        // butterworth LPF with bilinear transform and
+        // frequency warping.
+        //
+        //                1
+        // H(s) = -----------------
+        //         s^2 + s / Q + 1
+
         float wc = MathConstants<float>::twoPi * fc / fs;
         float c = 1.0f / dsp::FastMathApproximations::tan (wc / 2.0f);
         float phi = c * c;

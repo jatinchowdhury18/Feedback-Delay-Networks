@@ -235,7 +235,7 @@ echo "{" >> $proc_cpp
 echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "// This creates new instances of the plugin.." >> $proc_cpp
-echo "#if 1 // Set this flag to run with ReverbTester" >> $proc_cpp
+echo "#ifdef BUILD_WITH_REVERB_TESTER // Set this flag to run with ReverbTester" >> $proc_cpp
 echo "#include \"../../ReverbTester/Source/ReverbTesterProcessor.h\"" >> $proc_cpp
 echo "AudioProcessor* JUCE_CALLTYPE createPluginFilter()" >> $proc_cpp
 echo "{" >> $proc_cpp

@@ -1,5 +1,6 @@
 #include "BaseFDNProcessor.h"
 
+// Tags for parameters
 namespace
 {
     const String sizeTag      = "size";
@@ -11,12 +12,14 @@ namespace
 
 BaseFDNProcessor::BaseFDNProcessor()
 {
+    // set parameter handles to point to parameters
     sizeParam        = vts.getRawParameterValue (sizeTag);
     t60LowParam      = vts.getRawParameterValue (t60LowTag);
     t60HighParam     = vts.getRawParameterValue (t60HighTag);
     dryWetParam      = vts.getRawParameterValue (dryWetTag);
     preDelayMsParam  = vts.getRawParameterValue (preDelayTag);
 
+    // initialize FDNs
     const int numDelays = 9;
     fdnProcs[0] = std::make_unique<FDN> (numDelays);
     fdnProcs[1] = std::make_unique<FDN> (numDelays);
@@ -30,6 +33,7 @@ BaseFDNProcessor::~BaseFDNProcessor()
 
 void BaseFDNProcessor::addParameters (Parameters& params)
 {
+    // set up plugin parameters
     NormalisableRange<float> t60Range (0.1f, 10.0f);
     t60Range.setSkewForCentre (1.0f);
 
@@ -42,6 +46,8 @@ void BaseFDNProcessor::addParameters (Parameters& params)
 
 void BaseFDNProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    // set processors to use correct sample rate,
+    // and allocate any necessary memory
     AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
@@ -50,16 +56,19 @@ void BaseFDNProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
         fdnProcs[ch]->reset ((float) sampleRate);
     }
 
+    // allocate this buffer here, so it doesn't need re-allocation in the audio thread
     dryBuffer.setSize (2, samplesPerBlock);
     dryWetProc.reset();
 }
 
 void BaseFDNProcessor::releaseResources()
 {
+    // free any loose memory
 }
 
 void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
 {
+    // Process audio buffer
     ScopedNoDenormals noDenormals;
 
     dryBuffer.makeCopyOf (buffer, true);

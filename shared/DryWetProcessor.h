@@ -3,7 +3,7 @@
 
 #include "JuceHeader.h"
 
-/** Processot to mix dry and wet signals */
+/** Simple processor to mix dry and wet signals */
 class DryWetProcessor
 {
 public:

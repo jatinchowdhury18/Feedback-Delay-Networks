@@ -10,16 +10,15 @@ void AmpFeedbackFDN::reset (float sampleRate)
 {
     FDN::reset (sampleRate);
 
-    fbDelay.reset();
+    fbDelay.reset (sampleRate);
     lpf.reset (sampleRate);
+    sine.reset (sampleRate);
+    dcBlocker.reset (sampleRate);
 }
 
 void AmpFeedbackFDN::updateParams()
 {
     FDN::updateParams();
-
-    auto delayLenSamp = (int) ((delayLenMs / 1000.0f) * fs);
-    fbDelay.setDelay (delayLenSamp);
 
     lpf.calcCoefs (fc, 0.7071f);
 }
@@ -30,12 +29,14 @@ void AmpFeedbackFDN::processBlock (float* block, const int numSamples)
 
     for (int n = 0; n < numSamples; ++n)
     {
-        block[n] += fbGain * fbDelay.read();
+        fbDelay.setDelay (jmax (delayLenMs + sine.getNextSample(), 0.0f));
+
+        block[n] = fbGain * fbDelay.read() + (1.0f - fbGain) * block[n];
         fbDelay.updatePtrs();
 
         block[n] = processSample (block[n]);
         updatePtrs();
 
-        fbDelay.write (lpf.process (distortion (block[n])));
+        fbDelay.write (dcBlocker.process (lpf.process (distortion (block[n]))));
     }
 }

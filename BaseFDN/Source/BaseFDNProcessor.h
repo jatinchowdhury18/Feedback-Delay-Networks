@@ -4,6 +4,7 @@
 #include "FDN.h"
 #include "DryWetProcessor.h"
 
+/** Plugin class for basic FDN */
 class BaseFDNProcessor : public PluginProcessor<BaseFDNProcessor>
 {
 public:
@@ -16,16 +17,19 @@ public:
     void processBlock (AudioBuffer<float>& buffer) override;
     
 private:
+    // FDN parameter handles
     std::atomic<float>* sizeParam    = nullptr;
     std::atomic<float>* t60LowParam  = nullptr;
     std::atomic<float>* t60HighParam = nullptr;
 
     std::unique_ptr<FDN> fdnProcs[2];
 
+    // Dry/wet processing
     std::atomic<float>* dryWetParam = nullptr;
     AudioBuffer<float> dryBuffer;
     DryWetProcessor dryWetProc;
 
+    // Pre-delay processing
     std::atomic<float>* preDelayMsParam = nullptr;
     DelayLine delayLine[2];
 

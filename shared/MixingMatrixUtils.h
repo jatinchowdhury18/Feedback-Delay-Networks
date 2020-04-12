@@ -3,11 +3,13 @@
 
 #include "JuceHeader.h"
 
+/** Class for FDN mixing matrices */
 struct Matrix
 {
     Matrix (int dim) :
         dim (dim)
     {
+        // Allocate memory...
         matrix = new float*[dim];
         for (int i = 0; i < dim; ++i)
             matrix[i] = new float[dim];
@@ -15,6 +17,7 @@ struct Matrix
 
     ~Matrix()
     {
+        // Deallocate memory...
         for (int i = 0; i < dim; ++i)
             delete[] matrix[i];
         
@@ -27,6 +30,7 @@ struct Matrix
 
 namespace MixingMatrixUtils
 {
+    // Create identity matrix
     static void identityMatrix (Matrix& matrix)
     {
         for (int row = 0; row < matrix.dim; ++row)
@@ -41,6 +45,7 @@ namespace MixingMatrixUtils
         }
     }
 
+    /** Matrix generated for Music 424 HW7 */
     static void myMatrix (Matrix& matrix)
     {
         float myMatrix[12][12] = {
@@ -65,6 +70,7 @@ namespace MixingMatrixUtils
         }
     }
 
+    /** Write matrix to log (useful for debugging) */
     static void logMatrix (Matrix& matrix)
     {
         std::stringstream ss;
