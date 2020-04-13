@@ -59,6 +59,12 @@ void FDN::processBlock (float* block, const int numSamples)
 {
     updateParams();
 
+    // smooth shelf parameters if needed
+    if (shelfs[0].needsSmooth())
+        shelfProcess = &ShelfFilter::processSampleSmooth;
+    else
+        shelfProcess = &ShelfFilter::processSample;
+
     for (int n = 0; n < numSamples; ++n)
     {
         block[n] = processSample (block[n]);

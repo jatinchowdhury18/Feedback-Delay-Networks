@@ -27,12 +27,21 @@ public:
     /** Compute filter coefficients */
     void calcCoefs (float lowGain, float highGain, float fc);
 
-    inline float processSample (float x)
+    bool needsSmooth() const
+    {
+         return lowGainSmooth.isSmoothing() || highGainSmooth.isSmoothing() || fcSmooth.isSmoothing();
+    }
+
+    inline float processSampleSmooth (float x) noexcept
     {
         // Smooth parameter changes
-        if (lowGainSmooth.isSmoothing() || highGainSmooth.isSmoothing() || fcSmooth.isSmoothing())
-            calcCoefs (lowGainSmooth.getNextValue(), highGainSmooth.getNextValue(), fcSmooth.getNextValue());
+        calcCoefs (lowGainSmooth.getNextValue(), highGainSmooth.getNextValue(), fcSmooth.getNextValue());
 
+        return processSample (x);
+    }
+
+    inline float processSample (float x) noexcept
+    {
         float y = z[1] + x * b[0];
         z[1] = x * b[1] - y * a[1];
 

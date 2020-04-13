@@ -78,7 +78,7 @@ public:
 
             y += accum; // add to output
             accum += x; // add input to accumulator
-            accum = shelfs[dInd].processSample (accum); // filter
+            accum = (shelfs[dInd].*shelfProcess) (accum); // filter
             delayLines[dInd].write (accum);
         }
 
@@ -108,6 +108,9 @@ protected:
     Matrix matrix;
     float* delayReads = nullptr;
     float* delayAccums = nullptr;
+
+    // Shelf process function pointer
+    float (ShelfFilter::*shelfProcess) (float) = &ShelfFilter::processSample;
 
 private:
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FDN)

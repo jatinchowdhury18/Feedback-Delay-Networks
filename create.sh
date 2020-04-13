@@ -119,7 +119,7 @@ for file in ../ReverbTester/Source/*.cpp; do
 done
 echo ")" >> CMakeLists.txt
 echo "else()" >> CMakeLists.txt
-echo "    MESSAGE(STATUS "Building without ReverbTester")" >> CMakeLists.txt
+echo "    MESSAGE(STATUS \"Building without ReverbTester\")" >> CMakeLists.txt
 echo "endif()" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
