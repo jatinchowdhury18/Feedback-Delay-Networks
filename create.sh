@@ -147,6 +147,14 @@ for mod in $modules; do
     echo "" >> CMakeLists.txt
 done
 
+# Foley's GUI Magic module
+echo "jucer_project_module(" >> CMakeLists.txt
+echo "    foleys_gui_magic" >> CMakeLists.txt
+echo "    PATH \"$\{CMAKE_CURRENT_LIST_DIR\}/../modules\"" >> CMakeLists.txt
+echo "    FOLEYS_SHOW_GUI_EDITOR_PALLETTE OFF # Turn on to edit your GUI!" >> CMakeLists.txt
+echo ")" >> CMakeLists.txt
+echo "" >> CMakeLists.txt
+
 # JUCE exporters
 echo "Configuring exporters..."
 declare -a exports=("Xcode (MacOSX)" "Visual Studio 2017" "Linux Makefile")

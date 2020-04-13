@@ -8,7 +8,7 @@ git submodule update --init --recursive
 
 # set up FRUT
 if [ -d modules/FRUT/prefix/FRUT/ ]; then
-    echo "CMake already installed. To do a fresh install, delete modules/FRUT/prefix/, and run this script again."
+    echo "FRUT already installed. To do a fresh install, delete modules/FRUT/prefix/, and run this script again."
     exit
 fi
 

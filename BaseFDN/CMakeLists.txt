@@ -83,6 +83,7 @@ jucer_project_files("BaseFDN/Source"
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/BaseFDNProcessor.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/BaseFDNProcessor.cpp"
+  .         .         x         "${CMAKE_CURRENT_LIST_DIR}/Source/gui.xml"
 )
 
 # JUCE modules
@@ -150,6 +151,17 @@ jucer_project_module(
 jucer_project_module(
     juce_gui_extra
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
+)
+
+jucer_project_module(
+    juce_gui_extra
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
+)
+
+jucer_project_module(
+    foleys_gui_magic
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules"
+    FOLEYS_SHOW_GUI_EDITOR_PALLETTE OFF # Turn on to edit your GUI!
 )
 
 jucer_export_target(

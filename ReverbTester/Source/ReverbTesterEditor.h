@@ -16,6 +16,8 @@ public:
     void paint (Graphics& g) override;
     void resized() override;
 
+    void childBoundsChanged (Component* child) override;
+
 private:
     ReverbTesterProcessor& proc;
     std::unique_ptr<AudioProcessorEditor> procEditor;
