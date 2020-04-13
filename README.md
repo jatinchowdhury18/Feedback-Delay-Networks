@@ -57,6 +57,49 @@ To create a new plugin, use the `create.sh` script in
 the root of the repository. For more information run
 `./create.sh --help`.
 
+For an example of how to build out a full plugin from the
+template, including adding plugin parameters, DSP processing,
+and more, see `BaseFDN/`.
+
+### Plugin GUI
+Plugin GUIs are generated automatically using
+[`foleys_gui_magic`](https://github.com/ffAudio/foleys_gui_magic).
+To customize your own plugin GUI, turn on the GUI editor pallette
+from CMakeLists.txt.
+
+```cmake
+jucer_project_module(
+    foleys_gui_magic
+    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules"
+    FOLEYS_SHOW_GUI_EDITOR_PALLETTE OFF # Turn on to edit your GUI!
+)
+```
+Once your GUI is customized to your liking, save to an XML
+file, and add it to your project as a Binary Resource:
+
+```cmake
+jucer_project_files("MyFDN/Source"
+# Compile   Xcode     Binary    File
+#           Resource  Resource
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/Processor.h"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/Processor.cpp"
+  .         .         x         "${CMAKE_CURRENT_LIST_DIR}/Source/gui.xml"
+)
+```
+Finally, use the `createEditor()` function to return a
+GUI generated from the XML file.
+
+```cpp
+AudioProcessorEditor* MyFDNProcessor::createEditor()
+{
+    // Create GUI using Foley's editor with xml config for this plugin
+    return new foleys::MagicPluginEditor (magicState,
+        BinaryData::gui_xml, BinaryData::gui_xmlSize);
+}
+```
+For a full example of a custom GUI built with Foley's GUI Magic,
+see `BaseFDN/`.
+
 ### Suggested Workflow
 
 If you would like to contribute to the repository, 
