@@ -83,6 +83,7 @@ jucer_project_files("BaseFDN/Source"
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/BaseFDNProcessor.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/Source/BaseFDNProcessor.cpp"
+  .         .         x         "${CMAKE_CURRENT_LIST_DIR}/Source/gui.xml"
 )
 
 # JUCE modules

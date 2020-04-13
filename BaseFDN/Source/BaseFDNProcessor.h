@@ -15,6 +15,8 @@ public:
     void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void releaseResources() override;
     void processBlock (AudioBuffer<float>& buffer) override;
+
+    AudioProcessorEditor* createEditor() override;
     
 private:
     // FDN parameter handles
@@ -32,6 +34,9 @@ private:
     // Pre-delay processing
     std::atomic<float>* preDelayMsParam = nullptr;
     DelayLine delayLine[2];
+
+    // Level meter for in Foley's GUI
+    foleys::MagicLevelSource* levelSource = nullptr;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (BaseFDNProcessor)
 };

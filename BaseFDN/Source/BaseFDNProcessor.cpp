@@ -25,6 +25,9 @@ BaseFDNProcessor::BaseFDNProcessor()
     fdnProcs[1] = std::make_unique<FDN> (numDelays);
 
     MixingMatrixUtils::logMatrix (fdnProcs[0]->getMatrix());
+
+    // Setup levelSource
+    levelSource = magicState.addLevelSource ("meter", std::make_unique<foleys::MagicLevelSource>());
 }
 
 BaseFDNProcessor::~BaseFDNProcessor()
@@ -59,6 +62,9 @@ void BaseFDNProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
     // allocate this buffer here, so it doesn't need re-allocation in the audio thread
     dryBuffer.setSize (2, samplesPerBlock);
     dryWetProc.reset();
+
+    // Tell levelSource channel setup and sampleRate
+    levelSource->setupSource (getTotalNumOutputChannels(), sampleRate, 10, 50);
 }
 
 void BaseFDNProcessor::releaseResources()
@@ -97,6 +103,15 @@ void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
     // dry/wet processing
     dryWetProc.setDryWet (*dryWetParam);
     dryWetProc.processBlock (dryBuffer, buffer);
+
+    // push samples to level meter
+    levelSource->pushSamples (buffer);
+}
+
+AudioProcessorEditor* BaseFDNProcessor::createEditor()
+{
+    // Create GUI using Foley's editor with xml config for this plugin
+    return new foleys::MagicPluginEditor (magicState, BinaryData::gui_xml, BinaryData::gui_xmlSize);
 }
 
 // This creates new instances of the plugin..
