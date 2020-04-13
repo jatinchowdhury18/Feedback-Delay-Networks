@@ -31,6 +31,7 @@ public:
     void changeProgramName (int, const String&) override {}
 
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
+    void prepareToPlay (double sampleRate, int samplesPerBlock) override;
     void processBlock (AudioBuffer<float>&, MidiBuffer&) override;
     virtual void processBlock (AudioBuffer<float>&) = 0;
 
@@ -108,6 +109,13 @@ bool PluginProcessor<Processor>::isBusesLayoutSupported (const BusesLayout& layo
         return false;
     
     return true;
+}
+
+template<class Processor>
+void PluginProcessor<Processor>::prepareToPlay (double sampleRate, int samplesPerBlock)
+{
+    setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);
+    magicState.prepareToPlay (sampleRate, samplesPerBlock);
 }
 
 template<class Processor>
