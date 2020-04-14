@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/FRUT/prefix/
 include(Reprojucer)
 
 # Comment this line to build without the reverb tester
-add_definitions(-DBUILD_WITH_REVERB_TESTER)
+# add_definitions(-DBUILD_WITH_REVERB_TESTER)
 
 jucer_project_begin(
     JUCER_VERSION "5.4.7"

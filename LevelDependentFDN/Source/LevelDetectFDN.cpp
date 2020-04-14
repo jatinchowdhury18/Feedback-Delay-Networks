@@ -12,16 +12,9 @@ void LevelDetectFDN::prepare (float sampleRate, int samplesPerBlock)
     FDN::reset (sampleRate);
 
     maxNumSamples = samplesPerBlock;
-    detectBuffer = new float[maxNumSamples];
-    gLowBuffer   = new float[maxNumSamples];
-    gHighBuffer  = new float[maxNumSamples];
-}
-
-void LevelDetectFDN::releaseResources()
-{
-    delete[] detectBuffer;
-    delete[] gLowBuffer;
-    delete[] gHighBuffer;
+    detectBuffer.reset (new float[maxNumSamples]);
+    gLowBuffer  .reset (new float[maxNumSamples]);
+    gHighBuffer .reset (new float[maxNumSamples]);
 }
 
 void LevelDetectFDN::updateParams()
@@ -40,16 +33,19 @@ void LevelDetectFDN::updateParams()
         shelfs[dInd].setFreq (2500.0f);
     }
 
-    FloatVectorOperations::multiply (detectBuffer, levelScale, maxNumSamples);
-    FloatVectorOperations::add      (detectBuffer, levelOffset, maxNumSamples);
+    FloatVectorOperations::multiply (detectBuffer.get(), levelScale, maxNumSamples);
+    FloatVectorOperations::add      (detectBuffer.get(), levelOffset, maxNumSamples);
     
-    FloatVectorOperations::multiply (gLowBuffer,  detectBuffer, gLow,  maxNumSamples);
-    FloatVectorOperations::multiply (gHighBuffer, detectBuffer, gHigh, maxNumSamples);
+    FloatVectorOperations::multiply (gLowBuffer.get(),  detectBuffer.get(), gLow,  maxNumSamples);
+    FloatVectorOperations::multiply (gHighBuffer.get(), detectBuffer.get(), gHigh, maxNumSamples);
+
+    FloatVectorOperations::min (gLowBuffer.get(),  gLowBuffer.get(),  1.0f, maxNumSamples);
+    FloatVectorOperations::min (gHighBuffer.get(), gHighBuffer.get(), 1.0f, maxNumSamples);
 }
 
 void LevelDetectFDN::copyDetectBuffer (const float* buffer, int numSamples)
 {
-    FloatVectorOperations::copy (detectBuffer, buffer, numSamples);
+    FloatVectorOperations::copy (detectBuffer.get(), buffer, numSamples);
 }
 
 void LevelDetectFDN::processBlock (float* block, const int numSamples)

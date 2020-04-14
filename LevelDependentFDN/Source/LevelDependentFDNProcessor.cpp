@@ -45,7 +45,7 @@ void LevelDependentFDNProcessor::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (releaseTag, "Release [Ms]", relRange, 100.0f));
     params.push_back (std::make_unique<AudioParameterFloat> (t60LowTag,  "T60 Low",      t60Range, 0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (t60HighTag, "T60 High",     t60Range, 0.5f));
-    params.push_back (std::make_unique<AudioParameterFloat> (offsetTag,  "Offset", 0.0f, 0.5f, 0.0f));
+    params.push_back (std::make_unique<AudioParameterFloat> (offsetTag,  "Offset", 0.0f, 1.0f, 0.0f));
     params.push_back (std::make_unique<AudioParameterFloat> (scaleTag,   "Scale",  0.0f, 2.0f, 1.0f));
 }
 
@@ -58,8 +58,7 @@ void LevelDependentFDNProcessor::prepareToPlay (double sampleRate, int samplesPe
         detector[ch].reset ((float) sampleRate);
         detector[ch].setType (DetectorType::Peak);
 
-        fdnProcs[ch]->reset ((float) sampleRate);
-        fdnProcs[ch]->prepare (sampleRate, samplesPerBlock);
+        fdnProcs[ch]->prepare ((float) sampleRate, samplesPerBlock);
     }
 
     detectBuffer.setSize (getTotalNumInputChannels(), samplesPerBlock);
@@ -67,8 +66,6 @@ void LevelDependentFDNProcessor::prepareToPlay (double sampleRate, int samplesPe
 
 void LevelDependentFDNProcessor::releaseResources()
 {
-    for (int ch = 0; ch < 2; ++ch)
-        fdnProcs[ch]->releaseResources();
 }
 
 void LevelDependentFDNProcessor::processBlock (AudioBuffer<float>& buffer)
@@ -97,11 +94,6 @@ void LevelDependentFDNProcessor::processBlock (AudioBuffer<float>& buffer)
 
         fdnProcs[ch]->processBlock (x, buffer.getNumSamples());
     }
-
-    // Send levelDetection signal to oscilloscope
-    detectBuffer.applyGain (4.0f);
-    for (int ch = 0; ch < buffer.getNumChannels(); ++ch)
-        FloatVectorOperations::add (detectBuffer.getWritePointer (ch), -1.0f, buffer.getNumSamples());
 
     oscilloscope->pushSamples (buffer);
 }

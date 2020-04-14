@@ -3,7 +3,6 @@
 AmpFeedbackFDN::AmpFeedbackFDN (int numDelays) :
     FDN (numDelays)
 {
-    MixingMatrixUtils::myMatrix (matrix);
 }
 
 void AmpFeedbackFDN::reset (float sampleRate)

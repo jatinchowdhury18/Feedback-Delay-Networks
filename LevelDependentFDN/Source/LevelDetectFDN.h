@@ -12,7 +12,6 @@ public:
     void setScale  (float newScale) { levelScale  = newScale; }
 
     void prepare (float sampleRate, int samplesPerBlock);
-    void releaseResources();
 
     void updateParams() override;
     void copyDetectBuffer (const float* buffer, int numSamples);
@@ -20,9 +19,10 @@ public:
 
 private:
     int maxNumSamples = 0;
-    float* detectBuffer = nullptr;
-    float* gLowBuffer   = nullptr;
-    float* gHighBuffer  = nullptr;
+
+    std::unique_ptr<float[]> detectBuffer;
+    std::unique_ptr<float[]> gLowBuffer;
+    std::unique_ptr<float[]> gHighBuffer;
 
     float gLow = 0.0f;
     float gHigh = 0.0f;
