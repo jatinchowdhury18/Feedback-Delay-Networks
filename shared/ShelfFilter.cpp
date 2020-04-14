@@ -13,10 +13,20 @@ void ShelfFilter::setLowGain (float newLowGain)
         lowGainSmooth.setTargetValue (newLowGain);
 }
 
+void ShelfFilter::setLowGainForce (float newLowGain)
+{
+    lowGainSmooth.setCurrentAndTargetValue (newLowGain);
+}
+
 void ShelfFilter::setHighGain (float newHighGain)
 {
     if (newHighGain != highGainSmooth.getTargetValue())
         highGainSmooth.setTargetValue (newHighGain);
+}
+
+void ShelfFilter::setHighGainForce (float newHighGain)
+{
+    highGainSmooth.setCurrentAndTargetValue (newHighGain);
 }
 
 void ShelfFilter::setFreq (float newFreq)

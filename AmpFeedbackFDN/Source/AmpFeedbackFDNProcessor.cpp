@@ -58,7 +58,7 @@ void AmpFeedbackFDNProcessor::addParameters (Parameters& params)
 
 void AmpFeedbackFDNProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);
+    PluginProcessor::prepareToPlay (sampleRate, samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
         fdnProcs[ch]->reset ((float) sampleRate);

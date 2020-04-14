@@ -14,9 +14,11 @@ public:
 
     /** Set gain at DC */
     void setLowGain (float newLowGain);
+    void setLowGainForce (float newHighGain);
 
     /** Set gain at inifitie frequency*/
     void setHighGain (float newHighGain);
+    void setHighGainForce (float newHighGain);
     
     /** Set transition frequency */
     void setFreq (float newFreq);

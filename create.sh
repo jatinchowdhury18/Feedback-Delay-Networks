@@ -231,7 +231,7 @@ echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "void ${class}::prepareToPlay (double sampleRate, int samplesPerBlock)" >> $proc_cpp
 echo "{" >> $proc_cpp
-echo "    AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);" >> $proc_cpp
+echo "    PluginProcessor::prepareToPlay (sampleRate, samplesPerBlock);" >> $proc_cpp
 echo "}" >> $proc_cpp
 echo "" >> $proc_cpp
 echo "void ${class}::releaseResources()" >> $proc_cpp

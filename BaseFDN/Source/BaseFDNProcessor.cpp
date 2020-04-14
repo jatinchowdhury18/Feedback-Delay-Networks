@@ -47,11 +47,14 @@ void BaseFDNProcessor::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (preDelayTag, "PreDelay (Ms)", 0.0f, 500.0f, 20.0f));
 }
 
+/**
+ * Use this function to set processors to use
+ * correct sample rate, and allocate any necessary
+ * memory.
+ * */
 void BaseFDNProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // set processors to use correct sample rate,
-    // and allocate any necessary memory
-    AudioProcessor::setRateAndBufferSizeDetails (sampleRate, samplesPerBlock);
+    PluginProcessor::prepareToPlay (sampleRate, samplesPerBlock);
 
     for (int ch = 0; ch < 2; ++ch)
     {

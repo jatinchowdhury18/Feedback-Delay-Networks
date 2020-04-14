@@ -3,7 +3,6 @@
 AmpFeedbackFDN::AmpFeedbackFDN (int numDelays) :
     FDN (numDelays)
 {
-    MixingMatrixUtils::myMatrix (matrix);
 }
 
 void AmpFeedbackFDN::reset (float sampleRate)
@@ -26,6 +25,12 @@ void AmpFeedbackFDN::updateParams()
 void AmpFeedbackFDN::processBlock (float* block, const int numSamples)
 {
     updateParams();
+
+    // smooth shelf parameters if needed
+    if (shelfs[0].needsSmooth())
+        shelfProcess = &ShelfFilter::processSampleSmooth;
+    else
+        shelfProcess = &ShelfFilter::processSample;
 
     for (int n = 0; n < numSamples; ++n)
     {
