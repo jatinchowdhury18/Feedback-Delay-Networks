@@ -69,12 +69,8 @@ void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
 
         irSampleCount += samplesToWrite;
 
-        if ((buffer.getMagnitude (0, buffer.getNumSamples()) < Decibels::decibelsToGain (-75.0f)
-            || irSampleCount == irBuffer.getNumSamples()) && ! startDetecting)
+        if (irSampleCount + getBlockSize() >= irBuffer.getNumSamples())
             setState (None);
-
-        if (startDetecting && buffer.getMagnitude (0, buffer.getNumSamples()) > Decibels::decibelsToGain (-75.0f))
-            startDetecting = false;
     }
 
     else if (state == File)
@@ -95,9 +91,8 @@ void ReverbTesterProcessor::setState (State newState)
     if (newState == IR)
     {
         startIR = true;
-        startDetecting = true;
         irBuffer.clear();
-        irBuffer.setSize (getMainBusNumOutputChannels(), 15 * (int) getSampleRate());
+        irBuffer.setSize (getMainBusNumOutputChannels(), 2 * (int) getSampleRate());
         irSampleCount = 0;
         Logger::writeToLog ("Generating IR...");
     }
