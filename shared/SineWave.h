@@ -27,6 +27,12 @@ public:
         amp = newAmp;
     }
 
+    /** Set oscillator phase (0 - 2pi) */
+    void setPhase (float newPhase)
+    {
+        phase = jlimit (0.0f, MathConstants<float>::twoPi, newPhase);
+    }
+
     /** Reset internal sammple rate */
     void reset (float sampleRate)
     {
@@ -34,10 +40,24 @@ public:
         setFreq (freq);
     }
 
+    void processBlock (float* block, const int numSamples)
+    {
+        for (int n = 0; n < numSamples; ++n)
+        {
+            block[n] = sin (phase + curAngle);
+            curAngle += angleDelta;
+        }
+
+        if (curAngle > MathConstants<float>::twoPi)
+            curAngle -= MathConstants<float>::twoPi;
+
+        FloatVectorOperations::multiply (block, amp, numSamples);
+    }
+
     /** Compute next sample */
     inline float getNextSample()
     {
-        auto curSample = sin (curAngle);
+        auto curSample = sin (phase + curAngle);
         curAngle += angleDelta;
 
         if (curAngle > MathConstants<float>::twoPi)
@@ -53,6 +73,7 @@ private:
     float fs = 44100.0f;
     float amp = 1.0f;
     float freq = 100.0f;
+    float phase = 0.0f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SineWave)
 };
