@@ -2,19 +2,21 @@
 
 SmoothDelay::SmoothDelay()
 {
-    smoothDelay.reset (smoothSteps);
 }
 
 void SmoothDelay::setDelay (float lenMs)
 {
-    smoothDelay.setTargetValue (lenMs);
+    smoothDelay = lenMs;
+    updateDelay();
 }
 
 void SmoothDelay::reset (float sampleRate)
 {
     fs = sampleRate;
-    lineLow.reset();
-    lineHigh.reset();
+    line.reset();
 
-    setDelay (smoothDelay.skip (smoothSteps));
+    for (int n = 0; n < 4; ++n)
+        z[n] = 0.0f;
+
+    readVal = 0.0f;
 }

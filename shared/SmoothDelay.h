@@ -5,9 +5,9 @@
 
 /** 
  * Delay line with fractional sample
- * delays and smooth delay length changes.
+ * delays using 4-point Lagrange interpolation.
  * 
- * Based on Faust `fdelay`: https://github.com/grame-cncm/faustlibraries/blob/master/delays.lib#L89
+ * Based on: https://ccrma.stanford.edu/~jos/pasp/Explicit_Lagrange_Coefficient_Formulas.html
  * */
 class SmoothDelay
 {
@@ -19,45 +19,47 @@ public:
 
     inline void write (float data)
     {
-        lineLow.write (data);
-        lineHigh.write (data);
+        line.write (data);
     }
 
     inline float read()
     {
-        return delayFrac * lineHigh.read()
-            + (1.0f - delayFrac) * lineLow.read();
+        return readVal;
     }
 
     inline void updatePtrs()
     {
-        lineLow.updatePtrs();
-        lineHigh.updatePtrs();
+        line.updatePtrs();
 
-        if (smoothDelay.isSmoothing())
-            updateDelay();
+        readVal = h[0] * *line.readPtr + h[1] * z[1]+ h[2] * z[2] + h[3] * z[3];
+        z[3] = z[2];
+        z[2] = z[1];
+        z[1] = *line.readPtr;
     }
 
-    void updateDelay()
+    inline void updateDelay()
     {
-        auto lenMs = smoothDelay.getNextValue();
-
-        float delaySamp = (lenMs / 1000.0f) * fs;
-        lineLow.setDelay ((int) delaySamp);
-        lineHigh.setDelay ((int) delaySamp + 1);
+        float delaySamp = (smoothDelay / 1000.0f) * fs;
+        line.setDelay ((int) delaySamp);
 
         delayFrac = delaySamp - (int) delaySamp;
+        h[0] = -1.0f * (delayFrac - 1.0f) * (delayFrac - 2.0f) * (delayFrac - 3.0f) / 6.0f;
+        h[1] =  delayFrac * (delayFrac - 2.0f) * (delayFrac - 3.0f) / 2.0f;
+        h[2] = -delayFrac * (delayFrac - 1.0f) * (delayFrac - 3.0f) / 2.0f;
+        h[3] =  delayFrac * (delayFrac - 1.0f) * (delayFrac - 2.0f) / 6.0f;
     }
 
+    float readVal;
+
 private:
-    DelayLine lineLow;
-    DelayLine lineHigh;
+    DelayLine line;
 
     float fs = 44100.0f;
     float delayFrac = 0.0f;
+    float h[4];
+    float z[4];
 
-    SmoothedValue<float, ValueSmoothingTypes::Linear> smoothDelay = 10.0f;
-    enum { smoothSteps = 500 };
+    float smoothDelay = 10.0f;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (SmoothDelay)
 };

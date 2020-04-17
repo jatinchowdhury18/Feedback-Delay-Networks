@@ -42,7 +42,7 @@ void ChorusFDNProcessor::addParameters (Parameters& params)
     params.push_back (std::make_unique<AudioParameterFloat> (t60LowTag,  "T60 Low",  t60Range,  0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (t60HighTag, "T60 High", t60Range,  0.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (oscFreqTag, "Osc Freq", freqRange, 1.0f));
-    params.push_back (std::make_unique<AudioParameterFloat> (oscAmpTag,  "Osc Amp",  ampRange,  7.5f));
+    params.push_back (std::make_unique<AudioParameterFloat> (oscAmpTag,  "Osc Amp",  ampRange,  2.5f));
     params.push_back (std::make_unique<AudioParameterFloat> (phaseTag,   "Phase Scramble",  0.0f, 1.0f, 0.25f));
 }
 
