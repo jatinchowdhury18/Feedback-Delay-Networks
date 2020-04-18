@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PluginProcessor.h"
+#include "Console.h"
 
 /** Plugin class for ReverbTester */
 class ReverbTesterProcessor : public PluginProcessor<ReverbTesterProcessor>,
@@ -33,6 +34,8 @@ public:
     AudioTransportSource& getTransportSource() { return source; }
 
     AudioProcessor* getReverbProc() { return reverbProcessor.get(); }
+
+    Console console;
 
 private:
     State state = None;

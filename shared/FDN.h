@@ -51,7 +51,7 @@ public:
      * This function should be called every time
      * after a sample has been processed.
      * */
-    inline void updatePtrs()
+    virtual inline void updatePtrs()
     {
         for (int dInd = 0; dInd < numDelays; ++dInd)
             delayLines[dInd].updatePtrs();

@@ -2,7 +2,6 @@
 #define REVERBTESTEREDITOR_H_INCLUDED
 
 #include "ReverbTesterProcessor.h"
-#include "Console.h"
 #include "IRViewer.h"
 #include "FilePlayer.h"
 
@@ -24,7 +23,6 @@ private:
 
     IRViewer irViewer;
     FilePlayer filePlayer;
-    Console console;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbTesterEditor)
 };

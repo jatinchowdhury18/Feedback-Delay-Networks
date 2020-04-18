@@ -9,7 +9,7 @@ class DelayLine
 public:
     DelayLine() {}
 
-    void setDelay (int lengthSamples) { delayLenSamples = (int) floor (jmin (lengthSamples, (int) maxDelay)); }
+    void setDelay (int lengthSamples) { delayLenSamples = (int) jmin (lengthSamples, (int) maxDelay); }
 
     /** Reset delay buffer to 0 */
     void reset()

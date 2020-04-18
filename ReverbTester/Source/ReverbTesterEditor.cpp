@@ -27,7 +27,7 @@ ReverbTesterEditor::ReverbTesterEditor (ReverbTesterProcessor& p) :
 
     addAndMakeVisible (irViewer);
     addAndMakeVisible (filePlayer);
-    addAndMakeVisible (console);
+    addAndMakeVisible (proc.console);
 
     setResizable(true, true);
     auto screenBounds = Desktop::getInstance().getDisplays().getMainDisplay().userArea;
@@ -58,7 +58,7 @@ void ReverbTesterEditor::resized()
 {
     irViewer.setBounds   (0,  10, 400, 150);
     filePlayer.setBounds (0, 160, 400, 150);
-    console.setBounds    (0, 320, 400, getHeight() - 330);
+    proc.console.setBounds    (0, 320, 400, getHeight() - 330);
 
     if (procEditor.get())
     {
