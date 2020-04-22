@@ -95,7 +95,10 @@ echo "# Source files" >> CMakeLists.txt
 echo "jucer_project_files(\"$1/shared\"" >> CMakeLists.txt
 echo "# Compile   Xcode     Binary    File" >> CMakeLists.txt
 echo "#           Resource  Resource" >> CMakeLists.txt
-shopt -s globstar
+
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    shopt -s globstar
+fi
 for file in ../shared/{,**/}*.h; do
     echo "  .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
 done
