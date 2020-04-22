@@ -10,7 +10,7 @@ FDN::FDN (int numDelays) :
     delayLines = new DelayLine[numDelays];
     shelfs = new ShelfFilter[numDelays];
 
-    MixingMatrixUtils::myMatrix (matrix);
+    MixingMatrixUtils::orthonormal (matrix);
 
     delayReads = new float[numDelays];
 }

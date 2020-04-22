@@ -59,10 +59,14 @@ jucer_project_files("ChorusFDN/shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SineWave.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LevelDetector.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.cpp"
 )
 
 get_directory_property(MYDEFS COMPILE_DEFINITIONS)

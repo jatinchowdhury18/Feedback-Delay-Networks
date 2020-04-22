@@ -2,6 +2,7 @@
 #define MIXING_MATRIX_UTILS_H_INCLUDED
 
 #include "JuceHeader.h"
+#include "r8lib/matrix_exponential.h"
 
 /** Class for FDN mixing matrices */
 struct Matrix
@@ -13,6 +14,13 @@ struct Matrix
         matrix = new float*[dim];
         for (int i = 0; i < dim; ++i)
             matrix[i] = new float[dim];
+    }
+
+    Matrix (const Matrix& oldMatrix) :
+        Matrix (oldMatrix.dim)
+    {
+        for (int row = 0; row < dim; ++row)
+            FloatVectorOperations::copy (matrix[row], oldMatrix.matrix[row], dim);
     }
 
     ~Matrix()
@@ -30,19 +38,67 @@ struct Matrix
 
 namespace MixingMatrixUtils
 {
-    // Create identity matrix
-    static void identityMatrix (Matrix& matrix)
+    /** Write matrix to log (useful for debugging) */
+    static void logMatrix (Matrix& matrix)
     {
+        std::stringstream ss;
         for (int row = 0; row < matrix.dim; ++row)
         {
             for (int col = 0; col < matrix.dim; ++col)
             {
-                if (row == col)
-                    matrix.matrix[row][col] = 1.0f;
-                else
-                    matrix.matrix[row][col] = 0.0f;
+                if (matrix.matrix[row][col] >= 0.0f)
+                    ss << '+';
+
+                ss << std::fixed << std::setprecision (4) << matrix.matrix[row][col];
+                
+                if (col < matrix.dim - 1)
+                    ss << ", ";
+            }
+            ss << '\n';
+        }
+        
+        String matString = String (ss.str());
+        Logger::writeToLog (matString);
+
+    }
+
+    // Create identity matrix
+    static void identityMatrix (Matrix& matrix)
+    {
+        for (int row = 0; row < matrix.dim; ++row)
+            for (int col = 0; col < matrix.dim; ++col)
+                matrix.matrix[row][col] = row == col ? 1.0f : 0.0f;
+    }
+
+    /** Orthonormal matrix */
+    static void orthonormal (Matrix& matrix)
+    {
+        Random rand;
+        float dcy = 2.0f;
+
+        // set up A, a random diagonnaly symmetric matrix
+        Matrix A (matrix.dim);
+        for (int ind1 = 0; ind1 < matrix.dim; ++ind1)
+        {
+            for (int ind2 = ind1; ind2 < matrix.dim; ++ind2)
+            {
+                A.matrix[ind1][ind2] = (-1.0f + 2.0f * rand.nextFloat()) * pow (float (ind2 - ind1), dcy);
+                A.matrix[ind2][ind1] = -A.matrix[ind1][ind2];
             }
         }
+
+        // exponentiate matrix
+        auto r8InMat = std::make_unique<double[]> (A.dim * A.dim);
+        for (int row = 0; row < matrix.dim; ++row)
+            for (int col = 0; col < matrix.dim; ++col)
+                r8InMat[row * A.dim + col] = A.matrix[row][col];
+
+        std::unique_ptr<double[]> r8OutMat;
+        r8OutMat.reset (r8mat_expm1 (A.dim, r8InMat.get()));
+
+        for (int row = 0; row < matrix.dim; ++row)
+            for (int col = 0; col < matrix.dim; ++col)
+                matrix.matrix[row][col] = r8OutMat[row * A.dim + col];
     }
 
     /** Matrix generated for Music 424 HW7 */
@@ -68,30 +124,6 @@ namespace MixingMatrixUtils
             for (int col = 0; col < matrix.dim; ++col)
                 matrix.matrix[row][col] = myMatrix[row][col];
         }
-    }
-
-    /** Write matrix to log (useful for debugging) */
-    static void logMatrix (Matrix& matrix)
-    {
-        std::stringstream ss;
-        for (int row = 0; row < matrix.dim; ++row)
-        {
-            for (int col = 0; col < matrix.dim; ++col)
-            {
-                if (matrix.matrix[row][col] >= 0.0f)
-                    ss << '+';
-
-                ss << std::fixed << std::setprecision (4) << matrix.matrix[row][col];
-                
-                if (col < matrix.dim - 1)
-                    ss << ", ";
-            }
-            ss << '\n';
-        }
-        
-        String matString = String (ss.str());
-        Logger::writeToLog (matString);
-
     }
 }
 

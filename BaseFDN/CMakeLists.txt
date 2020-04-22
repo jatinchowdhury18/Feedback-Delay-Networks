@@ -53,8 +53,12 @@ jucer_project_files("BaseFDN/shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/MixingMatrixUtils.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.cpp"
 )
 
 get_directory_property(MYDEFS COMPILE_DEFINITIONS)
