@@ -98,7 +98,7 @@ namespace MixingMatrixUtils
 
         for (int row = 0; row < matrix.dim; ++row)
             for (int col = 0; col < matrix.dim; ++col)
-                matrix.matrix[row][col] = r8OutMat[row * A.dim + col];
+                matrix.matrix[row][col] = (float) r8OutMat[row * A.dim + col];
     }
 
     /** Matrix generated for Music 424 HW7 */

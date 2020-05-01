@@ -11,7 +11,7 @@ MatrixFaderFDN::MatrixFaderFDN (int numDelays) :
 
     for (int row = 0; row < numDelays; ++row)
         for (int col = 0; col <  numDelays; ++col)
-            offDiagMat.matrix[row][col] = diagMat.matrix[row][numDelays - col];
+            offDiagMat.matrix[row][col] = diagMat.matrix[row][numDelays - col - 1];
 }
 
 void MatrixFaderFDN::updateParams()
