@@ -12,7 +12,7 @@ public:
     void setDelay (int lengthSamples) { delayLenSamples = (int) jmin (lengthSamples, (int) maxDelay); }
 
     /** Reset delay buffer to 0 */
-    void reset()
+    virtual void reset()
     {
         for (int n = 0; n < maxDelay; ++n)
             buffer[n] = 0.0f;
@@ -21,18 +21,18 @@ public:
         writePtr = &buffer[wp];
     }
 
-    inline void write (float data)
+    inline virtual void write (float data)
     { 
         buffer[wp] = data;
     }
     
-    inline float read() const noexcept
+    inline virtual float read() const noexcept
     { 
         return buffer[rp];
     }
 
     /** Update read and write pointers */
-    inline void updatePtrs()
+    inline virtual void updatePtrs()
     {
         wp -= 1;
 
