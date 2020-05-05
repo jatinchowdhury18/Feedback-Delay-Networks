@@ -42,50 +42,8 @@ jucer_audio_plugin_settings(
     PLUGIN_AU_EXPORT_PREFIX "SchroederArch2AU"
 )
 
-# Source files
-jucer_project_files("SchroederArch2/shared"
-# Compile   Xcode     Binary    File
-#           Resource  Resource
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/Biquad.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DCBlocker.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DelayLine.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DelayUtils.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DryWetProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LevelDetector.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LPF.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/MixingMatrixUtils.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SineWave.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/Biquad.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DCBlocker.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DelayLine.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DelayUtils.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/DryWetProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LevelDetector.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LPF.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/MixingMatrixUtils.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/PluginProcessor.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SineWave.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/AllpassDelay.h"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LevelDetector.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/FDN.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/LevelDetector.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/matrix_exponential.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/r8lib/r8lib.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/ShelfFilter.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/../shared/SmoothDelay.cpp"
-)
+# add shared files
+add_subdirectory(../shared shared_build)
 
 get_directory_property(MYDEFS COMPILE_DEFINITIONS)
 if(MYDEFS MATCHES "^BUILD_WITH_REVERB_TESTER")
@@ -191,6 +149,7 @@ jucer_project_module(
 
 jucer_export_target(
     "Xcode (MacOSX)"
+    EXTERNAL_LIBRARIES_TO_LINK FDNShared
 )
 
 jucer_export_target_configuration(
@@ -211,6 +170,7 @@ jucer_export_target(
     "Visual Studio 2017"
     EXTRA_PREPROCESSOR_DEFINITIONS
         _CRT_SECURE_NO_WARNINGS
+    EXTERNAL_LIBRARIES_TO_LINK FDNShared
 )
 
 jucer_export_target_configuration(
@@ -229,6 +189,7 @@ jucer_export_target_configuration(
 
 jucer_export_target(
     "Linux Makefile"
+    EXTERNAL_LIBRARIES_TO_LINK FDNShared
 )
 
 jucer_export_target_configuration(
