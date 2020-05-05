@@ -145,7 +145,7 @@ for mod in $modules; do
     echo "    $mod" >> CMakeLists.txt
     echo "    PATH \"\${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules\"" >> CMakeLists.txt
     if [ $mod = "juce_audio_plugin_client" ]; then
-        echo "JUCE_VST3_CAN_REPLACE_VST2 OFF" >> CMakeLists.txt
+        echo "    JUCE_VST3_CAN_REPLACE_VST2 OFF" >> CMakeLists.txt
     fi
     echo ")" >> CMakeLists.txt
     echo "" >> CMakeLists.txt

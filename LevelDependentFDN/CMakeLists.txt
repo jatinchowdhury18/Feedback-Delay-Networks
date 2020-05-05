@@ -42,8 +42,8 @@ jucer_audio_plugin_settings(
     PLUGIN_AU_EXPORT_PREFIX "LevelDependentFDNAU"
 )
 
-# shared files
-add_subdirectory(../shared .)
+# add shared files
+add_subdirectory(../shared shared_build)
 
 get_directory_property(MYDEFS COMPILE_DEFINITIONS)
 if(MYDEFS MATCHES "^BUILD_WITH_REVERB_TESTER")

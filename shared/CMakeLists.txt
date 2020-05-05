@@ -58,12 +58,6 @@ jucer_project_module(
 )
 
 jucer_project_module(
-    juce_audio_plugin_client
-    PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
-JUCE_VST3_CAN_REPLACE_VST2 OFF
-)
-
-jucer_project_module(
     juce_audio_formats
     PATH "${CMAKE_CURRENT_LIST_DIR}/../modules/JUCE/modules"
 )
