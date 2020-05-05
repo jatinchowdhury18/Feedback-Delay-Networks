@@ -90,23 +90,8 @@ echo ")" >> CMakeLists.txt
 echo "" >> CMakeLists.txt
 
 echo "Adding source files..."
-echo "# Source files" >> CMakeLists.txt
-# shared files
-echo "jucer_project_files(\"$1/shared\"" >> CMakeLists.txt
-echo "# Compile   Xcode     Binary    File" >> CMakeLists.txt
-echo "#           Resource  Resource" >> CMakeLists.txt
-
-if [[ "$OSTYPE" != "darwin"* ]]; then
-    shopt -s globstar
-fi
-for file in ../shared/{,**/}*.h; do
-    echo "  .         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
-done
-for file in ../shared/{,**/}*.cpp; do
-    echo "  x         .         .         \"\${CMAKE_CURRENT_LIST_DIR}/${file}\"" >> CMakeLists.txt
-done
-echo ")" >> CMakeLists.txt
-echo "" >> CMakeLists.txt
+echo "# add shared files" >> CMakeLists.txt
+echo "add_subdirectory(../shared shared_build)" >> CMakeLists.txt
 
 # ReverbTester files
 echo "get_directory_property(MYDEFS COMPILE_DEFINITIONS)" >> CMakeLists.txt
@@ -169,6 +154,7 @@ for e in "${exports[@]}"; do
         echo "    EXTRA_PREPROCESSOR_DEFINITIONS" >> CMakeLists.txt
         echo "        _CRT_SECURE_NO_WARNINGS" >> CMakeLists.txt
     fi
+    echo "EXTERNAL_LIBRARIES_TO_LINK FDNShared" >> CMakeLists.txt
     echo ")" >> CMakeLists.txt
     echo "" >> CMakeLists.txt
     echo "jucer_export_target_configuration(" >> CMakeLists.txt
