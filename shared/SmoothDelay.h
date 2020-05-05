@@ -15,19 +15,19 @@ public:
     SmoothDelay();
 
     void setDelay (float lenMs);
-    void reset (float sampleRate);
+    virtual void reset (float sampleRate);
 
-    inline void write (float data)
+    inline virtual void write (float data)
     {
         line.write (data);
     }
 
-    inline float read()
+    inline virtual float read() const noexcept
     {
         return readVal;
     }
 
-    inline void updatePtrs()
+    inline virtual void updatePtrs()
     {
         line.updatePtrs();
 
