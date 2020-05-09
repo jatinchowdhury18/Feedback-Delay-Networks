@@ -6,11 +6,14 @@
 #include "FilePlayer.h"
 
 /** GUI class for ReverbTester */
-class ReverbTesterEditor : public AudioProcessorEditor
+class ReverbTesterEditor : public AudioProcessorEditor,
+                           private Timer
 {
 public:
     ReverbTesterEditor (ReverbTesterProcessor& p);
     ~ReverbTesterEditor();
+
+    void timerCallback() override;
 
     void paint (Graphics& g) override;
     void resized() override;
@@ -23,6 +26,7 @@ private:
 
     IRViewer irViewer;
     FilePlayer filePlayer;
+    Label cpuLabel;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ReverbTesterEditor)
 };

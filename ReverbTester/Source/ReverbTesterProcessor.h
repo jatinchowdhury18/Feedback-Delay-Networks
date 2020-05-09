@@ -36,6 +36,7 @@ public:
     AudioProcessor* getReverbProc() { return reverbProcessor.get(); }
 
     Console console;
+    AudioProcessLoadMeasurer loadMeasurer;
 
 private:
     State state = None;

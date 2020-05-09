@@ -18,6 +18,7 @@ void ReverbTesterProcessor::addParameters (Parameters&)
 
 void ReverbTesterProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    loadMeasurer.reset (sampleRate, samplesPerBlock);
     source.prepareToPlay (samplesPerBlock, sampleRate);
 
     if (reverbProcessor.get())
@@ -34,6 +35,8 @@ void ReverbTesterProcessor::releaseResources()
 
 void ReverbTesterProcessor::processBlock (AudioBuffer<float>& buffer)
 {
+    AudioProcessLoadMeasurer::ScopedTimer loadTimer (loadMeasurer);
+
     if (state == None)
     {
         buffer.clear();
