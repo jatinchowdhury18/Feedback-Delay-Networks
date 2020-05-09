@@ -66,13 +66,12 @@ public:
     virtual inline float processSample (float x)
     {
         float y = 0.0f;
+        // accumulate values from delay lines
+        for (int sumInd = 0; sumInd < numDelays; sumInd++)
+            delayReads[sumInd] = *delayLines[sumInd].readPtr;
 
         for (int dInd = 0; dInd < numDelays; ++dInd)
         {
-            // accumulate values from delay lines
-            for (int sumInd = 0; sumInd < numDelays; sumInd++)
-                delayReads[sumInd] = *delayLines[sumInd].readPtr;
-            
             // multiply by mixing matrix
             auto accum = std::inner_product (matrix.matrix[dInd], matrix.matrix[dInd] + numDelays, delayReads, 0.0f);
 

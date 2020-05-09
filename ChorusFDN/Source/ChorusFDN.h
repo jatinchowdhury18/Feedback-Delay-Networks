@@ -29,13 +29,12 @@ public:
     inline float processSample (float x) override
     {
         float y = 0.0f;
+        // accumulate values from delay lines
+        for (int sumInd = 0; sumInd < numDelays; sumInd++)
+            delayReads[sumInd] = sDelayLines[sumInd].read();
 
         for (int dInd = 0; dInd < numDelays; ++dInd)
         {
-            // accumulate values from delay lines
-            for (int sumInd = 0; sumInd < numDelays; sumInd++)
-                delayReads[sumInd] = sDelayLines[sumInd].read();
-            
             // multiply by mixing matrix
             auto accum = std::inner_product (matrix.matrix[dInd], matrix.matrix[dInd] + numDelays, delayReads, 0.0f);
 

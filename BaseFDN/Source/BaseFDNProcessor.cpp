@@ -20,7 +20,7 @@ BaseFDNProcessor::BaseFDNProcessor()
     preDelayMsParam  = vts.getRawParameterValue (preDelayTag);
 
     // initialize FDNs
-    const int numDelays = 9;
+    const int numDelays = 12;
     fdnProcs[0] = std::make_unique<FDN> (numDelays);
     fdnProcs[1] = std::make_unique<FDN> (numDelays);
 
