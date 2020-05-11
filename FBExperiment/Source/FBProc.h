@@ -1,7 +1,7 @@
 #ifndef FBPROC_H_INCLUDED
 #define FBPROC_H_INCLUDED
 
-#include "SmoothAllpassDelay.h"
+#include "AllpassDelay.h"
 
 class FBProc
 {
@@ -20,7 +20,8 @@ public:
 
     void reset (float sampleRate)
     {
-        delay.reset (sampleRate);
+        fs = sampleRate;
+        delay.reset();
         osc.prepare ({ sampleRate, 512, 2 });
     }
 
@@ -44,17 +45,18 @@ public:
 
         for (int n = 0; n < numSamples; ++n)
         {
-            delay.setDelay (delayLenMs + curOscGain * osc.processSample (0.0f));
+            delay.setDelay (delayLenMs * fs / 1000.0f + curOscGain * osc.processSample (0.0f));
             buffer[n] = processSample (buffer[n]);
         }
     }
 
 private:
-    SmoothAllpassDelay delay;
+    AllpassDelay<> delay;
     float gain = 0.0f;
     float oscGain = 0.0f;
     float delayLenMs = 1.0f;
     float driveGain = 1.0f;
+    float fs = 44100.0f;
 
     dsp::Oscillator<float> osc;
 

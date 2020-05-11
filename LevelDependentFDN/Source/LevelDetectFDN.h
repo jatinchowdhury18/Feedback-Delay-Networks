@@ -21,11 +21,8 @@ private:
     int maxNumSamples = 0;
 
     std::unique_ptr<float[]> detectBuffer;
-    std::unique_ptr<float[]> gLowBuffer;
-    std::unique_ptr<float[]> gHighBuffer;
-
-    float gLow = 0.0f;
-    float gHigh = 0.0f;
+    AudioBuffer<float> gLowBuffer;
+    AudioBuffer<float> gHighBuffer;
 
     float levelOffset = 0.0f;
     float levelScale  = 1.0f;

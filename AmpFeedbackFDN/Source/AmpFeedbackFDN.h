@@ -3,7 +3,6 @@
 
 #include "FDN.h"
 #include "LPF.h"
-#include "SmoothDelay.h"
 #include "SineWave.h"
 #include "DCBlocker.h"
 
@@ -39,7 +38,7 @@ private:
     float fbOscFreq = 0.0f;
 
     SineWave sine;
-    SmoothDelay fbDelay;
+    DelayLine<float, DelayLineInterpolationTypes::Lagrange3rd> fbDelay;
     DCBlocker dcBlocker;
     LPF lpf;
 

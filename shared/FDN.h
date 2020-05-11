@@ -101,7 +101,7 @@ protected:
     // Ideally smart pointers are preferred over raw pointers,
     // but it seems that smart pointers have some performance
     // overhead that becomes noticeable when doing these computations.
-    DelayLine<float, DelayLineInterpolationTypes::Linear>* delayLines;
+    DelayLine<float>* delayLines;
     ShelfFilter* shelfs;
 
     Matrix matrix;

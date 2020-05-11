@@ -7,7 +7,7 @@ FDN::FDN (int numDelays) :
 {
     // Allocate memory here...
     delayLensMs = DelayUtils::generateDelayLengths (numDelays, 45, 1.1f, NextDelayType::AddOne);
-    delayLines = new DelayLine<float, DelayLineInterpolationTypes::Linear>[numDelays];
+    delayLines = new DelayLine<float>[numDelays];
     shelfs = new ShelfFilter[numDelays];
 
     MixingMatrixUtils::orthonormal (matrix);

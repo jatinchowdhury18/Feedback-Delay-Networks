@@ -62,32 +62,32 @@ public:
     SampleType getDelay() const;
 
     /** Resets the internal state variables of the processor. */
-    void reset();
+    virtual void reset();
 
     /** Writes a single sample into the delay line. */
-    inline void write (SampleType data) noexcept
+    virtual inline void write (SampleType data) noexcept
     {
         buffer[wp] = data;
     }
 
-    inline void write (SampleType data, int idx) noexcept
+    virtual inline void write (SampleType data, int idx) noexcept
     {
         buffer[idx] = data;
     }
 
     /** Reads a single sample from the delay line. */
-    inline SampleType read() noexcept
+    virtual inline SampleType read() noexcept
     {
         return interpolateSample (rp);
     }
 
-    inline SampleType read (int idx) noexcept
+    virtual inline SampleType read (int idx) noexcept
     {
         return interpolateSample (idx);
     }
 
     /** Update delay line read pointer */
-    inline void updatePtrs() noexcept
+    virtual inline void updatePtrs() noexcept
     {
         wp -= 1;
 
