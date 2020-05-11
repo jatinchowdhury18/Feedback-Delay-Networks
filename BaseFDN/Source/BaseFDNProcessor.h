@@ -33,7 +33,7 @@ private:
 
     // Pre-delay processing
     std::atomic<float>* preDelayMsParam = nullptr;
-    DelayLine delayLine[2];
+    DelayLine<float, DelayLineInterpolationTypes::Linear> delayLine[2];
 
     // Level meter for in Foley's GUI
     foleys::MagicLevelSource* levelSource = nullptr;

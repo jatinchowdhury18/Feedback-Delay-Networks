@@ -68,7 +68,7 @@ public:
         float y = 0.0f;
         // accumulate values from delay lines
         for (int sumInd = 0; sumInd < numDelays; sumInd++)
-            delayReads[sumInd] = *delayLines[sumInd].readPtr;
+            delayReads[sumInd] = delayLines[sumInd].read();
 
         for (int dInd = 0; dInd < numDelays; ++dInd)
         {
@@ -101,7 +101,7 @@ protected:
     // Ideally smart pointers are preferred over raw pointers,
     // but it seems that smart pointers have some performance
     // overhead that becomes noticeable when doing these computations.
-    DelayLine* delayLines;
+    DelayLine<float, DelayLineInterpolationTypes::Linear>* delayLines;
     ShelfFilter* shelfs;
 
     Matrix matrix;

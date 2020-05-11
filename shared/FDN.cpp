@@ -7,7 +7,7 @@ FDN::FDN (int numDelays) :
 {
     // Allocate memory here...
     delayLensMs = DelayUtils::generateDelayLengths (numDelays, 45, 1.1f, NextDelayType::AddOne);
-    delayLines = new DelayLine[numDelays];
+    delayLines = new DelayLine<float, DelayLineInterpolationTypes::Linear>[numDelays];
     shelfs = new ShelfFilter[numDelays];
 
     MixingMatrixUtils::orthonormal (matrix);
@@ -41,7 +41,7 @@ void FDN::updateParams()
     for (int dInd = 0; dInd < numDelays; ++dInd)
     {
         // compute delay line lengths
-        auto curDelayLen = (int) (((float) delayLensMs[dInd] / 1000.0f) * size * fs);
+        auto curDelayLen = (((float) delayLensMs[dInd] / 1000.0f) * size * fs);
         delayLines[dInd].setDelay (curDelayLen);
 
         // compute gains for desired T60s

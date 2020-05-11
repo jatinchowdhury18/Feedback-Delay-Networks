@@ -86,7 +86,7 @@ void BaseFDNProcessor::processBlock (AudioBuffer<float>& buffer)
     {
         // pre-delay processing
         const auto delaySamples = (*preDelayMsParam / 1000.0f) * (float) getSampleRate();
-        delayLine[ch].setDelay (roundToInt (delaySamples));
+        delayLine[ch].setDelay (delaySamples);
 
         auto* x = buffer.getWritePointer (ch);
         for (int n = 0; n < buffer.getNumSamples(); ++n)
