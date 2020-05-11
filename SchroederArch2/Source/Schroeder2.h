@@ -75,8 +75,8 @@ private:
         numAPs = 4,
     };
 
-    AllpassDelay aps[numAPs];
-    DelayLine delay;
+    AllpassDelay<> aps[numAPs];
+    DelayLine<float> delay;
 
     float fbGain = 0.0f;
 

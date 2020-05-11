@@ -29,7 +29,6 @@ jucer_project_files("shared"
 #           Resource  Resource
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/Biquad.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/DCBlocker.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/DelayLine.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/DelayUtils.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/DryWetProcessor.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/FDN.h"
@@ -38,12 +37,13 @@ jucer_project_files("shared"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/PluginProcessor.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/ShelfFilter.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/SineWave.h"
-  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/SmoothDelay.h"
   .         .         .         "${CMAKE_CURRENT_LIST_DIR}/LevelDetector.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/DelayLine.h"
+  .         .         .         "${CMAKE_CURRENT_LIST_DIR}/AllpassDelay.h"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/FDN.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/ShelfFilter.cpp"
-  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/SmoothDelay.cpp"
   x         .         .         "${CMAKE_CURRENT_LIST_DIR}/LevelDetector.cpp"
+  x         .         .         "${CMAKE_CURRENT_LIST_DIR}/DelayLine.cpp"
 )
 
 # JUCE modules

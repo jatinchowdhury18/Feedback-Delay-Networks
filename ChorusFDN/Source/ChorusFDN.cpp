@@ -4,7 +4,7 @@
 ChorusFDN::ChorusFDN (int numDelays) :
     FDN (numDelays)
 {
-    sDelayLines = new SmoothDelay[numDelays];
+    sDelayLines = new DelayLine<float, DelayLineInterpolationTypes::Lagrange3rd>[numDelays];
     sine = new SineWave[numDelays];
 }
 
@@ -21,7 +21,7 @@ void ChorusFDN::prepare (float sampleRate, int samplesPerBlock)
     delayMsBuffer.setSize (numDelays, samplesPerBlock);
 
     for (int dInd = 0; dInd < numDelays; ++dInd)
-        sDelayLines[dInd].reset (sampleRate);
+        sDelayLines[dInd].reset();
 }
 
 void ChorusFDN::updateParams()
@@ -51,8 +51,10 @@ void ChorusFDN::processBlock (float* block, const int numSamples)
     for (int dInd = 0; dInd < numDelays; ++dInd)
     {
         auto delays = delayMsBuffer.getWritePointer (dInd);
-        sine[dInd].processBlock (delays, numSamples);
-        FloatVectorOperations::add (delays, (float) delayLensMs[dInd], numSamples);
+        // @TODO: fix this...
+        FloatVectorOperations::fill (delays, 0.0f, numSamples);
+        // sine[dInd].processBlock (delays, numSamples);
+        FloatVectorOperations::add (delays, (float) delayLensMs[dInd] * fs / 1000.0f, numSamples);
         FloatVectorOperations::max (delays, delays, 0.0f, numSamples);
     }
 

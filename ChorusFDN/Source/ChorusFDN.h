@@ -2,7 +2,6 @@
 #define CHORUSFDN_H_INCLUDED
 
 #include "FDN.h"
-#include "SmoothDelay.h"
 #include "SineWave.h"
 
 class ChorusFDN : public FDN
@@ -48,7 +47,7 @@ public:
     }
 
 private:
-    SmoothDelay* sDelayLines;
+    DelayLine<float, DelayLineInterpolationTypes::Lagrange3rd>* sDelayLines;
 
     SineWave* sine;
     AudioBuffer<float> delayMsBuffer;

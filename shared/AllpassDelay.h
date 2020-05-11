@@ -7,14 +7,15 @@
  * Allpass delay line.
  * Based on: https://ccrma.stanford.edu/~jos/pasp/Allpass_Two_Combs.html
  **/
-class AllpassDelay : public DelayLine
+template <typename InterpolationType = DelayLineInterpolationTypes::Linear>
+class AllpassDelay : public DelayLine<float, InterpolationType>
 {
 public:
     AllpassDelay() {}
 
     void reset() override
     {
-        DelayLine::reset();
+        DelayLine<float, InterpolationType>::reset();
 
         curX = 0.0f;
         curY = 0.0f;
@@ -22,24 +23,24 @@ public:
 
     void setG (float newG) { g = newG; }
 
-    inline void write (float data) override
+    inline void write (float data) noexcept override
     {
         curX = data;
     }
 
-    inline float read() const noexcept override
+    inline float read() noexcept override
     {
         return curY;
     }
 
-    inline void updatePtrs() override
+    inline void updatePtrs() noexcept override
     {
-        curY = -g * curX + DelayLine::read();
+        curY = -g * curX + DelayLine<float, InterpolationType>::read();
 
         auto in = g * curY + curX;
-        DelayLine::write (in);
+        DelayLine<float, InterpolationType>::write (in);
 
-        DelayLine::updatePtrs();
+        DelayLine<float, InterpolationType>::updatePtrs();
     }
 
 private:
