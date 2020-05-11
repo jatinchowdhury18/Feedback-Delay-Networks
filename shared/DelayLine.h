@@ -1,3 +1,6 @@
+#ifndef DELAYLINE_H_INCLUDED
+#define DELAYLINE_H_INCLUDED
+
 #include "JuceHeader.h"
 
 /**
@@ -196,3 +199,5 @@ private:
     SampleType alpha = 0.0;
     SampleType z = 0.0f;
 };
+
+#endif // DELAYLINE_H_INCLUDED
