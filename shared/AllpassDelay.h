@@ -15,7 +15,7 @@ public:
 
     void reset() override
     {
-        DelayLine::reset();
+        DelayLine<float, InterpolationType>::reset();
 
         curX = 0.0f;
         curY = 0.0f;
@@ -35,12 +35,12 @@ public:
 
     inline void updatePtrs() noexcept override
     {
-        curY = -g * curX + DelayLine::read();
+        curY = -g * curX + DelayLine<float, InterpolationType>::read();
 
         auto in = g * curY + curX;
-        DelayLine::write (in);
+        DelayLine<float, InterpolationType>::write (in);
 
-        DelayLine::updatePtrs();
+        DelayLine<float, InterpolationType>::updatePtrs();
     }
 
 private:
